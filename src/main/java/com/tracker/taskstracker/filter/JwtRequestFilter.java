@@ -19,6 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.tracker.taskstracker.jwt.JwtUtil;
 import com.tracker.taskstracker.service.api.UserService;
 
+// TODO: validate user role depending on the uri
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 

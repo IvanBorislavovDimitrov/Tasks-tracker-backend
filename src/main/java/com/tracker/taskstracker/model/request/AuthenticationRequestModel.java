@@ -2,7 +2,7 @@ package com.tracker.taskstracker.model.request;
 
 import com.sun.istack.NotNull;
 
-public class AuthenticationRequest {
+public class AuthenticationRequestModel {
 
     @NotNull
     private String username;

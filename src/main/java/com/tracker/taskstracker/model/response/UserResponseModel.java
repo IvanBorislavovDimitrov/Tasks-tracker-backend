@@ -2,7 +2,7 @@ package com.tracker.taskstracker.model.response;
 
 import java.util.List;
 
-public class UserResponseModel {
+public class UserResponseModel extends IdModel {
 
     private String email;
     private String username;

@@ -20,18 +20,17 @@ import com.tracker.taskstracker.repository.UserRepository;
 import com.tracker.taskstracker.service.api.UserService;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, UserResponseModel, String> implements UserService {
 
     private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder,
                            RoleRepository roleRepository) {
+        super(userRepository, modelMapper);
         this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
     }
@@ -72,5 +71,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    protected Class<UserResponseModel> getOutputModelClass() {
+        return UserResponseModel.class;
+    }
+
+    @Override
+    protected Class<User> getEntityClass() {
+        return User.class;
     }
 }

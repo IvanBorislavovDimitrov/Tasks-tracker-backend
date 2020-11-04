@@ -1,5 +1,6 @@
 package com.tracker.taskstracker.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ public class Project extends IdEntity {
 
     @ManyToMany
     @JoinTable(name = "users_projects", joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private List<User> users;
+    private List<User> users = new ArrayList<>();
 
     public String getName() {
         return name;

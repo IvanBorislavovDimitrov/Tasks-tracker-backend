@@ -22,7 +22,7 @@ public class RoleServiceImpl extends GenericServiceImpl<Role, RoleRequestModel, 
     private final RoleRepository roleRepository;
 
     @Autowired
-    protected RoleServiceImpl(RoleRepository roleRepository, ModelMapper modelMapper) {
+    public RoleServiceImpl(RoleRepository roleRepository, ModelMapper modelMapper) {
         super(roleRepository, modelMapper);
         this.roleRepository = roleRepository;
     }

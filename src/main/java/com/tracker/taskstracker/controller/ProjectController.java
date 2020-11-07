@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tracker.taskstracker.model.request.ProjectRequestModel;
+import com.tracker.taskstracker.model.request.UserToProjectRequestModel;
 import com.tracker.taskstracker.model.response.ProjectResponseModel;
 import com.tracker.taskstracker.service.api.ProjectService;
 
@@ -28,5 +29,12 @@ public class ProjectController {
     @PostMapping(value = "/create")
     public ResponseEntity<ProjectResponseModel> create(@Valid @RequestBody ProjectRequestModel projectRequestModel) {
         return ResponseEntity.ok(projectService.save(projectRequestModel));
+    }
+
+    @PostMapping(value = "/add-user-to-project")
+    public ResponseEntity<?> addUserToProject(@Valid @RequestBody UserToProjectRequestModel userToProjectRequestModel) {
+        projectService.addUserToProject(userToProjectRequestModel);
+        return ResponseEntity.ok()
+                             .build();
     }
 }

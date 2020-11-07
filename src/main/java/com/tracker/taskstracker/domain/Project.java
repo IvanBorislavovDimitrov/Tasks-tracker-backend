@@ -57,4 +57,8 @@ public class Project extends IdEntity {
         tasks.add(task);
     }
 
+    public void addUser(User user) {
+        users.add(user);
+    }
+
 }

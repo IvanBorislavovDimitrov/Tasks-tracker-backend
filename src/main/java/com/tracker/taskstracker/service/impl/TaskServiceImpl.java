@@ -21,7 +21,7 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
     private final ProjectRepository projectRepository;
 
     @Autowired
-    protected TaskServiceImpl(TaskRepository taskRepository, ModelMapper modelMapper, ProjectRepository projectRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository, ModelMapper modelMapper, ProjectRepository projectRepository) {
         super(taskRepository, modelMapper);
         this.projectRepository = projectRepository;
         this.taskRepository = taskRepository;

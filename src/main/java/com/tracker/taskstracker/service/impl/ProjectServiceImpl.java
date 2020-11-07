@@ -1,5 +1,8 @@
 package com.tracker.taskstracker.service.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,13 +31,22 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
     }
 
     @Override
-    public void addUserToProject(UserToProjectRequestModel userToProjectRequestModel) {
+    public ProjectResponseModel addUserToProject(UserToProjectRequestModel userToProjectRequestModel) {
         User user = userRepository.findByUsername(userToProjectRequestModel.getUsername());
         Project project = projectRepository.findByName(userToProjectRequestModel.getProjectName());
         user.addProject(project);
         project.addUser(user);
         projectRepository.save(project);
         userRepository.save(user);
+        return modelMapper.map(project, ProjectResponseModel.class);
+    }
+
+    @Override
+    public List<ProjectResponseModel> getProjectsByUsername(String username) {
+        List<Project> projects = projectRepository.findAllByUsersUsername(username);
+        return projects.stream()
+                       .map(project -> modelMapper.map(project, ProjectResponseModel.class))
+                       .collect(Collectors.toList());
     }
 
     @Override

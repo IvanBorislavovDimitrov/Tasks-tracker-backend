@@ -44,7 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .permitAll()
             .and()
             .authorizeRequests()
-            .antMatchers("/tasks/create", "/projects/create")
+            .antMatchers("/tasks/create", "/projects/create", "/project/add-user-to-project")
             .hasRole(Role.Type.ADMIN.toString())
             .and()
             .authorizeRequests()

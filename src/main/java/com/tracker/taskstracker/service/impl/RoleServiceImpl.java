@@ -1,6 +1,8 @@
 package com.tracker.taskstracker.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
@@ -33,11 +35,15 @@ public class RoleServiceImpl extends GenericServiceImpl<Role, RoleRequestModel, 
     }
 
     private List<Role> getDefaultRoles() {
-        Role admin = new Role();
-        admin.setRoleType(Role.RoleType.ADMIN);
-        Role user = new Role();
-        user.setRoleType(Role.RoleType.USER);
-        return List.of(admin, user);
+        return Stream.of(Role.Type.values())
+                     .map(this::createRole)
+                     .collect(Collectors.toList());
+    }
+
+    private Role createRole(Role.Type type) {
+        Role role = new Role();
+        role.setType(type);
+        return role;
     }
 
     @Override

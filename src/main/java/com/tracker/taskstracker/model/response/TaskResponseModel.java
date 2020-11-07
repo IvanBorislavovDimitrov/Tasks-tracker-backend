@@ -1,13 +1,13 @@
 package com.tracker.taskstracker.model.response;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class TaskResponseModel extends IdModel {
 
     private String name;
     private String state;
-    private LocalDate createdAt;
-    private LocalDate updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
     private String description;
     private ProjectResponseModel project;
     private UserResponseModel assignee;
@@ -28,19 +28,19 @@ public class TaskResponseModel extends IdModel {
         this.state = state;
     }
 
-    public LocalDate getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDate getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDate updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 

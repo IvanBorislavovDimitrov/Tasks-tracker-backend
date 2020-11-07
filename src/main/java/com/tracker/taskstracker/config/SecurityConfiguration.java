@@ -15,6 +15,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import com.tracker.taskstracker.domain.Role;
 import com.tracker.taskstracker.filter.JwtRequestFilter;
 import com.tracker.taskstracker.service.api.UserService;
 
@@ -41,6 +42,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/authenticate", "/", "/users/register")
             .permitAll()
+            .and()
+            .authorizeRequests()
+            .antMatchers("/tasks/create", "/projects/create")
+            .hasRole(Role.Type.ADMIN.toString())
             .and()
             .authorizeRequests()
             .anyRequest()

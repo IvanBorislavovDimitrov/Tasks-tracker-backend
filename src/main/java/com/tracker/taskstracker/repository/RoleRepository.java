@@ -8,5 +8,5 @@ import com.tracker.taskstracker.domain.Role;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, String> {
 
-    Role findByRoleType(Role.RoleType roleType);
+    Role findByType(Role.Type type);
 }

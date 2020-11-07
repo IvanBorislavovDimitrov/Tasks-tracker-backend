@@ -11,17 +11,17 @@ public class Role extends IdEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private RoleType roleType;
+    private Type type;
     @ManyToMany
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<User> users = new ArrayList<>();
 
-    public RoleType getRoleType() {
-        return roleType;
+    public Type getType() {
+        return type;
     }
 
-    public void setRoleType(RoleType role) {
-        this.roleType = role;
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public List<User> getUsers() {
@@ -38,10 +38,14 @@ public class Role extends IdEntity {
 
     @Override
     public String toString() {
-        return roleType.toString();
+        return type.toString();
     }
 
-    public enum RoleType {
+    public String getParsedRole() {
+        return "ROLE_" + getType();
+    }
+
+    public enum Type {
 
         ADMIN, USER
 

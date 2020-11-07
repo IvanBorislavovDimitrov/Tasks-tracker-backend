@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tracker.taskstracker.domain.Role;
 import com.tracker.taskstracker.domain.User;
@@ -19,6 +20,7 @@ import com.tracker.taskstracker.repository.UserRepository;
 import com.tracker.taskstracker.service.api.UserService;
 
 @Service
+@Transactional
 public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, UserResponseModel, String> implements UserService {
 
     private final UserRepository userRepository;
@@ -45,11 +47,11 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
     }
 
     private void addDefaultRoles(User user) {
-        Role userRole = roleRepository.findByRoleType(Role.RoleType.USER);
+        Role userRole = roleRepository.findByType(Role.Type.USER);
         user.addRole(userRole);
         userRole.addUser(user);
         if (userRepository.count() == 0) {
-            Role adminRole = roleRepository.findByRoleType(Role.RoleType.ADMIN);
+            Role adminRole = roleRepository.findByType(Role.Type.ADMIN);
             user.addRole(adminRole);
             adminRole.addUser(user);
         }

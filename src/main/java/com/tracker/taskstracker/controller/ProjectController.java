@@ -25,7 +25,7 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @PostMapping
+    @PostMapping(value = "/create")
     public ResponseEntity<ProjectResponseModel> create(@Valid @RequestBody ProjectRequestModel projectRequestModel) {
         return ResponseEntity.ok(projectService.save(projectRequestModel));
     }

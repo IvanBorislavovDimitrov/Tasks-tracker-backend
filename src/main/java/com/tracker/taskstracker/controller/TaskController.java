@@ -25,7 +25,7 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @PostMapping
+    @PostMapping(value = "/create")
     public ResponseEntity<TaskResponseModel> createTask(@Valid @RequestBody TaskRequestModel taskRequestModel) {
         TaskResponseModel taskResponseModel = taskService.save(taskRequestModel);
         return ResponseEntity.ok(taskResponseModel);

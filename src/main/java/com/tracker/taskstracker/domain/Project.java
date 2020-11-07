@@ -18,6 +18,8 @@ public class Project extends IdEntity {
     @ManyToMany
     @JoinTable(name = "users_projects", joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<User> users = new ArrayList<>();
+    @OneToMany(mappedBy = "project", targetEntity = Task.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Task> tasks = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -42,4 +44,17 @@ public class Project extends IdEntity {
     public void setUsers(List<User> users) {
         this.users = users;
     }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public void addTask(Task task) {
+        tasks.add(task);
+    }
+
 }

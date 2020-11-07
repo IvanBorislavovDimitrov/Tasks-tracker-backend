@@ -6,4 +6,6 @@ import com.tracker.taskstracker.domain.Project;
 
 public interface ProjectRepository extends JpaRepository<Project, String> {
 
+    Project findByName(String name);
+
 }

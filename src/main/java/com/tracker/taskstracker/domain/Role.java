@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import com.tracker.taskstracker.domain.enums.RoleType;
-
 @Entity
 @Table(name = "roles")
 public class Role extends IdEntity {
@@ -41,5 +39,11 @@ public class Role extends IdEntity {
     @Override
     public String toString() {
         return roleType.toString();
+    }
+
+    public enum RoleType {
+
+        ADMIN, USER
+
     }
 }

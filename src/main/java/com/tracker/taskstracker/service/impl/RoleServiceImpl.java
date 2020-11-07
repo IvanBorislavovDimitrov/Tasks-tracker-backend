@@ -5,10 +5,10 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tracker.taskstracker.domain.Role;
-import com.tracker.taskstracker.domain.enums.RoleType;
 import com.tracker.taskstracker.model.request.RoleRequestModel;
 import com.tracker.taskstracker.model.response.RoleResponseModel;
 import com.tracker.taskstracker.repository.RoleRepository;
@@ -19,6 +19,7 @@ public class RoleServiceImpl extends GenericServiceImpl<Role, RoleRequestModel, 
 
     private final RoleRepository roleRepository;
 
+    @Autowired
     protected RoleServiceImpl(RoleRepository roleRepository, ModelMapper modelMapper) {
         super(roleRepository, modelMapper);
         this.roleRepository = roleRepository;
@@ -33,9 +34,9 @@ public class RoleServiceImpl extends GenericServiceImpl<Role, RoleRequestModel, 
 
     private List<Role> getDefaultRoles() {
         Role admin = new Role();
-        admin.setRoleType(RoleType.ADMIN);
+        admin.setRoleType(Role.RoleType.ADMIN);
         Role user = new Role();
-        user.setRoleType(RoleType.USER);
+        user.setRoleType(Role.RoleType.USER);
         return List.of(admin, user);
     }
 

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.tracker.taskstracker.domain.Role;
 import com.tracker.taskstracker.domain.User;
-import com.tracker.taskstracker.domain.enums.RoleType;
 import com.tracker.taskstracker.exception.TRException;
 import com.tracker.taskstracker.model.request.UserRequestModel;
 import com.tracker.taskstracker.model.response.UserResponseModel;
@@ -46,11 +45,11 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
     }
 
     private void addDefaultRoles(User user) {
-        Role userRole = roleRepository.findByRoleType(RoleType.USER);
+        Role userRole = roleRepository.findByRoleType(Role.RoleType.USER);
         user.addRole(userRole);
         userRole.addUser(user);
         if (userRepository.count() == 0) {
-            Role adminRole = roleRepository.findByRoleType(RoleType.ADMIN);
+            Role adminRole = roleRepository.findByRoleType(Role.RoleType.ADMIN);
             user.addRole(adminRole);
             adminRole.addUser(user);
         }

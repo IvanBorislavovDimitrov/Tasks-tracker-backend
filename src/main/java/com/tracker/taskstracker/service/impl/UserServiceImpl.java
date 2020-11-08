@@ -58,7 +58,7 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
     }
 
     @Override
-    public UserResponseModel getByUsername(String username) {
+    public UserResponseModel findByUsername(String username) {
         User user = userRepository.findByUsername(username);
         return modelMapper.map(user, UserResponseModel.class);
     }

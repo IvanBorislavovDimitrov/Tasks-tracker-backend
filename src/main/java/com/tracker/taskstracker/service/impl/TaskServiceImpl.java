@@ -1,6 +1,8 @@
 package com.tracker.taskstracker.service.impl;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,14 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
         project.addTask(task);
         taskRepository.save(task);
         return modelMapper.map(task, TaskResponseModel.class);
+    }
+
+    @Override
+    public List<TaskResponseModel> findTasksByProjectId(String projectId) {
+        List<Task> tasks = taskRepository.findAllByProjectId(projectId);
+        return tasks.stream()
+                    .map(task -> modelMapper.map(task, TaskResponseModel.class))
+                    .collect(Collectors.toList());
     }
 
     private void setDefaultTaskState(Task task) {

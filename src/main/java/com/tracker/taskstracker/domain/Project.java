@@ -20,6 +20,8 @@ public class Project extends IdEntity {
     private List<User> users = new ArrayList<>();
     @OneToMany(mappedBy = "project", targetEntity = Task.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Task> tasks = new ArrayList<>();
+    @OneToMany(mappedBy = "project", targetEntity = ProjectComment.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Comment> projectComments = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -51,6 +53,14 @@ public class Project extends IdEntity {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public List<Comment> getProjectComments() {
+        return projectComments;
+    }
+
+    public void setProjectComments(List<Comment> projectComments) {
+        this.projectComments = projectComments;
     }
 
     public void addTask(Task task) {

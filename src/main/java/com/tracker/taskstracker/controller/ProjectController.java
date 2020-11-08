@@ -44,7 +44,7 @@ public class ProjectController {
                                                 .getAuthentication()
                                                 .getPrincipal();
         String username = ((UserDetails) principal).getUsername();
-        List<ProjectResponseModel> projectResponseModels = projectService.getProjectsByUsername(username);
+        List<ProjectResponseModel> projectResponseModels = projectService.findProjectsByUsername(username);
         return ResponseEntity.ok(projectResponseModels);
     }
 }

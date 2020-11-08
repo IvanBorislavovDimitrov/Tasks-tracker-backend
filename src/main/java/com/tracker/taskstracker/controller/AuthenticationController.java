@@ -38,7 +38,7 @@ public class AuthenticationController {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(authenticationRequestModel.getUsername(),
                                                                                             authenticationRequestModel.getPassword());
         authenticate(token);
-        UserResponseModel userResponseModel = userService.getByUsername(authenticationRequestModel.getUsername());
+        UserResponseModel userResponseModel = userService.findByUsername(authenticationRequestModel.getUsername());
         return ResponseEntity.ok(new AuthenticationResponseModel(JwtUtil.generateToken(userResponseModel)));
     }
 

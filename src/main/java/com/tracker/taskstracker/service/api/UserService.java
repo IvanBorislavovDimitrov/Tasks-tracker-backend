@@ -9,5 +9,5 @@ public interface UserService extends UserDetailsService, GenericService<UserRequ
 
     UserResponseModel register(UserRequestModel userRequestModel);
 
-    UserResponseModel getByUsername(String username);
+    UserResponseModel findByUsername(String username);
 }

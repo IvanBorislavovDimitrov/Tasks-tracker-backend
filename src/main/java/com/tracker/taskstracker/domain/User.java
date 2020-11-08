@@ -27,6 +27,8 @@ public class User extends IdEntity implements UserDetails {
     private List<Project> projects = new ArrayList<>();
     @OneToMany(mappedBy = "assignee", targetEntity = Task.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Task> tasks = new ArrayList<>();
+    @OneToMany(mappedBy = "author", targetEntity = Comment.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
     public String getEmail() {
         return email;
@@ -102,6 +104,14 @@ public class User extends IdEntity implements UserDetails {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     public void addRole(Role role) {

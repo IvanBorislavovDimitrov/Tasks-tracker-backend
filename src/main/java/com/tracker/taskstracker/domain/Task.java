@@ -1,7 +1,9 @@
 package com.tracker.taskstracker.domain;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -23,7 +25,7 @@ public class Task extends IdEntity {
     private Date createdAt;
     @Column(name = "updated_at")
     private Date updatedAt;
-    @Lob
+    @Column(length = 10000)
     private String description;
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -31,6 +33,8 @@ public class Task extends IdEntity {
     @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     private Project project;
+    @OneToMany(mappedBy = "task", targetEntity = TaskComment.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Comment> taskComments = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -86,6 +90,14 @@ public class Task extends IdEntity {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public List<Comment> getTaskComments() {
+        return taskComments;
+    }
+
+    public void setTaskComments(List<Comment> taskComments) {
+        this.taskComments = taskComments;
     }
 
     public enum State {

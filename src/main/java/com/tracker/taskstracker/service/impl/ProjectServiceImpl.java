@@ -42,7 +42,7 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
     }
 
     @Override
-    public List<ProjectResponseModel> getProjectsByUsername(String username) {
+    public List<ProjectResponseModel> findProjectsByUsername(String username) {
         List<Project> projects = projectRepository.findAllByUsersUsername(username);
         return projects.stream()
                        .map(project -> modelMapper.map(project, ProjectResponseModel.class))

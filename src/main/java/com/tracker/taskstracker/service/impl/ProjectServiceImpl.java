@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import com.tracker.taskstracker.model.request.UserToProjectRequestModel;
 import com.tracker.taskstracker.model.response.ProjectResponseModel;
 import com.tracker.taskstracker.repository.ProjectRepository;
 import com.tracker.taskstracker.repository.UserRepository;
+import com.tracker.taskstracker.service.api.FileService;
 import com.tracker.taskstracker.service.api.ProjectService;
 
 @Service
@@ -22,12 +24,27 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
 
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
+    private final FileService fileService;
 
     @Autowired
-    public ProjectServiceImpl(ProjectRepository projectRepository, ModelMapper modelMapper, UserRepository userRepository) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, ModelMapper modelMapper, UserRepository userRepository,
+                              FileService fileService) {
         super(projectRepository, modelMapper);
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
+        this.fileService = fileService;
+    }
+
+    @Override
+    public ProjectResponseModel save(ProjectRequestModel projectRequestModel) {
+        modelMapper.addMappings(new PropertyMap<ProjectRequestModel, Project>() {
+            @Override
+            protected void configure() {
+                map().setPictureName(source.getName());
+            }
+        });
+        fileService.save(projectRequestModel.getName(), projectRequestModel.getPicture());
+        return super.save(projectRequestModel);
     }
 
     @Override

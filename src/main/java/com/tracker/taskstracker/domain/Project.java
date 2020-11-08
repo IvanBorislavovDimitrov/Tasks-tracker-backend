@@ -11,10 +11,10 @@ public class Project extends IdEntity {
 
     @Column(nullable = false, unique = true)
     private String name;
-
     @Column(nullable = false)
     private String description;
-
+    @Column
+    private String pictureName;
     @ManyToMany
     @JoinTable(name = "users_projects", joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<User> users = new ArrayList<>();
@@ -61,6 +61,14 @@ public class Project extends IdEntity {
 
     public void setProjectComments(List<Comment> projectComments) {
         this.projectComments = projectComments;
+    }
+
+    public String getPictureName() {
+        return pictureName;
+    }
+
+    public void setPictureName(String pictureName) {
+        this.pictureName = pictureName;
     }
 
     public void addTask(Task task) {

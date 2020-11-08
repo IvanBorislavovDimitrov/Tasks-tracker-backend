@@ -27,8 +27,8 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<ProjectResponseModel> create(@Valid @RequestBody ProjectRequestModel projectRequestModel) {
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProjectResponseModel> create(@Valid @ModelAttribute ProjectRequestModel projectRequestModel) {
         return ResponseEntity.ok(projectService.save(projectRequestModel));
     }
 

@@ -2,7 +2,7 @@ package com.tracker.taskstracker.model.response;
 
 import java.util.List;
 
-public class ProjectResponseModelAdvanced extends ProjectResponseModel {
+public class ProjectResponseModelExtended extends ProjectResponseModel {
 
     private List<UserResponseModel> users;
     private List<CommentResponseModel> comments;

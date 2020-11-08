@@ -47,4 +47,10 @@ public class ProjectController {
         List<ProjectResponseModel> projectResponseModels = projectService.findProjectsByUsername(username);
         return ResponseEntity.ok(projectResponseModels);
     }
+
+    @GetMapping(value = "/{projectId}")
+    public ResponseEntity<? extends ProjectResponseModel> getProjectById(@PathVariable String projectId) {
+        ProjectResponseModel projectResponseModel = projectService.findProjectById(projectId);
+        return ResponseEntity.ok(projectResponseModel);
+    }
 }

@@ -11,4 +11,6 @@ public interface ProjectService extends GenericService<ProjectRequestModel, Proj
     ProjectResponseModel addUserToProject(UserToProjectRequestModel userToProjectRequestModel);
 
     List<ProjectResponseModel> findProjectsByUsername(String username);
+
+    ProjectResponseModel findProjectById(String projectId);
 }

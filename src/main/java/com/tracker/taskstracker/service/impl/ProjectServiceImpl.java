@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 
 import com.tracker.taskstracker.domain.Project;
 import com.tracker.taskstracker.domain.User;
+import com.tracker.taskstracker.exception.TRException;
 import com.tracker.taskstracker.model.request.ProjectRequestModel;
 import com.tracker.taskstracker.model.request.UserToProjectRequestModel;
 import com.tracker.taskstracker.model.response.ProjectResponseModel;
+import com.tracker.taskstracker.model.response.ProjectResponseModelExtended;
 import com.tracker.taskstracker.repository.ProjectRepository;
 import com.tracker.taskstracker.repository.UserRepository;
 import com.tracker.taskstracker.service.api.FileService;
@@ -64,6 +66,13 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
         return projects.stream()
                        .map(project -> modelMapper.map(project, ProjectResponseModel.class))
                        .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProjectResponseModel findProjectById(String projectId) {
+        Project project = projectRepository.findById(projectId)
+                                           .orElseThrow(() -> new TRException("Project not found"));
+        return modelMapper.map(project, ProjectResponseModelExtended.class);
     }
 
     @Override

@@ -13,4 +13,6 @@ public interface ProjectService extends GenericService<ProjectRequestModel, Proj
     List<ProjectResponseModel> findProjectsByUsername(String username);
 
     ProjectResponseModel findProjectById(String projectId);
+
+    String findProjectPictureName(String projectId);
 }

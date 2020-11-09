@@ -22,7 +22,20 @@ public class FileServiceImpl implements FileService {
             directory.mkdir();
         }
         byte[] bytes = getBytes(file);
-        saveFile(name + getFileExtension(file), bytes);
+        saveFile(name, bytes);
+    }
+
+    @Override
+    public byte[] findImageByName(String projectPictureName) {
+        File file = new File(FILES_DIRECTORY + File.separator + projectPictureName);
+        if (!file.exists()) {
+            throw new TRException("Image not found");
+        }
+        try {
+            return FileUtils.readFileToByteArray(file);
+        } catch (IOException e) {
+            throw new TRException("Image not loaded");
+        }
     }
 
     private byte[] getBytes(MultipartFile file) {
@@ -39,12 +52,6 @@ public class FileServiceImpl implements FileService {
         } catch (IOException e) {
             throw new TRException(e.getMessage(), e);
         }
-    }
-
-    private String getFileExtension(MultipartFile file) {
-        return file.getOriginalFilename()
-                   .substring(file.getOriginalFilename()
-                                  .lastIndexOf("."));
     }
 
 }

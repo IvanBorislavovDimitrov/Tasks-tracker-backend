@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.tracker.taskstracker.domain.Project;
 import com.tracker.taskstracker.domain.User;
@@ -42,11 +43,17 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
         modelMapper.addMappings(new PropertyMap<ProjectRequestModel, Project>() {
             @Override
             protected void configure() {
-                map().setPictureName(source.getName());
+                map().setPictureName(source.getName() + getFileExtension(projectRequestModel.getPicture()));
             }
         });
         fileService.save(projectRequestModel.getName(), projectRequestModel.getPicture());
         return super.save(projectRequestModel);
+    }
+
+    private String getFileExtension(MultipartFile file) {
+        return file.getOriginalFilename()
+                   .substring(file.getOriginalFilename()
+                                  .lastIndexOf("."));
     }
 
     @Override
@@ -73,6 +80,13 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
         Project project = projectRepository.findById(projectId)
                                            .orElseThrow(() -> new TRException("Project not found"));
         return modelMapper.map(project, ProjectResponseModelExtended.class);
+    }
+
+    @Override
+    public String findProjectPictureName(String projectId) {
+        Project project = projectRepository.findById(projectId)
+                                           .orElseThrow(() -> new TRException("Project not found"));
+        return project.getPictureName();
     }
 
     @Override

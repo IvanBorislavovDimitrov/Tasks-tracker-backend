@@ -6,4 +6,5 @@ public interface FileService {
 
     void save(String name, MultipartFile file);
 
+    byte[] findImageByName(String projectPictureName);
 }

@@ -100,6 +100,10 @@ public class Task extends IdEntity {
         this.taskComments = taskComments;
     }
 
+    public void addComment(TaskComment taskComment) {
+        taskComments.add(taskComment);
+    }
+
     public enum State {
 
         BACKLOG, SELECTED, IN_PROGRESS, BLOCKED, COMPLETED, RELEASED;

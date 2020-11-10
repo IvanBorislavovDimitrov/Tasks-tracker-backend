@@ -79,4 +79,8 @@ public class Project extends IdEntity {
         users.add(user);
     }
 
+    public void addComment(ProjectComment projectComment) {
+        projectComments.add(projectComment);
+    }
+
 }

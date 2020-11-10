@@ -7,24 +7,25 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import com.tracker.taskstracker.model.request.ProjectRequestModel;
 import com.tracker.taskstracker.model.request.UserToProjectRequestModel;
 import com.tracker.taskstracker.model.response.ProjectResponseModel;
 import com.tracker.taskstracker.service.api.ProjectService;
+import com.tracker.taskstracker.util.LoggedUserGetter;
 
 @RestController
 @RequestMapping(value = "/projects", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProjectController {
 
     private final ProjectService projectService;
+    private final LoggedUserGetter loggedUserGetter;
 
     @Autowired
-    public ProjectController(ProjectService projectService) {
+    public ProjectController(ProjectService projectService, LoggedUserGetter loggedUserGetter) {
         this.projectService = projectService;
+        this.loggedUserGetter = loggedUserGetter;
     }
 
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -40,11 +41,7 @@ public class ProjectController {
 
     @GetMapping(value = "/my-projects")
     public ResponseEntity<List<ProjectResponseModel>> getMyProjects() {
-        Object principal = SecurityContextHolder.getContext()
-                                                .getAuthentication()
-                                                .getPrincipal();
-        String username = ((UserDetails) principal).getUsername();
-        List<ProjectResponseModel> projectResponseModels = projectService.findProjectsByUsername(username);
+        List<ProjectResponseModel> projectResponseModels = projectService.findProjectsByUsername(loggedUserGetter.getUsername());
         return ResponseEntity.ok(projectResponseModels);
     }
 

@@ -65,8 +65,14 @@ public class TaskController {
     public ResponseEntity<TaskResponseModel> updateTask(@Valid @RequestBody TaskUpdateRequestModel taskUpdateRequestModel,
                                                         @PathVariable String taskId) {
         TaskResponseModel taskResponseModel = taskService.updateTask(taskUpdateRequestModel, taskId);
-        return ResponseEntity.ok(taskResponseModel);    
+        return ResponseEntity.ok(taskResponseModel);
 
+    }
+
+    @DeleteMapping(value = "/delete/{taskId}")
+    public ResponseEntity<TaskResponseModel> deleteTask(@PathVariable String taskId) {
+        TaskResponseModel taskResponseModel = taskService.deleteTaskById(taskId);
+        return ResponseEntity.ok(taskResponseModel);
     }
 
 }

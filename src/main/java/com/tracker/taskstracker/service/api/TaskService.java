@@ -18,4 +18,7 @@ public interface TaskService extends GenericService<TaskRequestModel, TaskRespon
     TaskResponseModel alterTaskState(String taskId, TaskStateRequestModel taskStateRequestModel);
 
     TaskResponseModel updateTask(TaskUpdateRequestModel taskUpdateRequestModel, String taskId);
+
+    TaskResponseModel deleteTaskById(String taskId);
+
 }

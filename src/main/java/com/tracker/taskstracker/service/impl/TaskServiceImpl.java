@@ -102,6 +102,15 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
     }
 
     @Override
+    public TaskResponseModel deleteTaskById(String taskId) {
+        Task task = taskRepository.findById(taskId)
+                                  .orElseThrow(() -> new TRException("Task not found"));
+        TaskResponseModel taskResponseModel = modelMapper.map(task, TaskResponseModel.class);
+        taskRepository.delete(task);
+        return taskResponseModel;
+    }
+
+    @Override
     protected Class<TaskResponseModel> getOutputModelClass() {
         return TaskResponseModel.class;
     }

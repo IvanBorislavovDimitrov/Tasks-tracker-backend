@@ -14,6 +14,7 @@ import com.tracker.taskstracker.domain.User;
 import com.tracker.taskstracker.exception.TRException;
 import com.tracker.taskstracker.model.request.TaskRequestModel;
 import com.tracker.taskstracker.model.request.TaskStateRequestModel;
+import com.tracker.taskstracker.model.request.TaskUpdateRequestModel;
 import com.tracker.taskstracker.model.response.TaskResponseModel;
 import com.tracker.taskstracker.model.response.TaskResponseModelExtended;
 import com.tracker.taskstracker.repository.ProjectRepository;
@@ -88,6 +89,15 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
                                   .orElseThrow(() -> new TRException("Task not found"));
         Task.State state = Task.State.fromString(taskStateRequestModel.getState());
         task.setState(state);
+        return modelMapper.map(taskRepository.save(task), TaskResponseModel.class);
+    }
+
+    @Override
+    public TaskResponseModel updateTask(TaskUpdateRequestModel taskUpdateRequestModel, String taskId) {
+        Task task = taskRepository.findById(taskId)
+                                  .orElseThrow(() -> new TRException("Task not found"));
+        task.setName(taskUpdateRequestModel.getName());
+        task.setDescription(taskUpdateRequestModel.getDescription());
         return modelMapper.map(taskRepository.save(task), TaskResponseModel.class);
     }
 

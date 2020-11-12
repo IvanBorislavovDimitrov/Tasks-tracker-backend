@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.tracker.taskstracker.model.request.TaskRequestModel;
 import com.tracker.taskstracker.model.request.TaskStateRequestModel;
+import com.tracker.taskstracker.model.request.TaskUpdateRequestModel;
 import com.tracker.taskstracker.model.response.TaskResponseModel;
 import com.tracker.taskstracker.service.api.TaskService;
 import com.tracker.taskstracker.util.LoggedUserGetter;
@@ -53,11 +54,19 @@ public class TaskController {
         return ResponseEntity.ok(taskResponseModel);
     }
 
-        @PatchMapping(value = "/alter-state/{taskId}")
+    @PatchMapping(value = "/alter-state/{taskId}")
     public ResponseEntity<TaskResponseModel> alterTaskState(@Valid @RequestBody TaskStateRequestModel taskStateRequestModel,
                                                             @PathVariable String taskId) {
         TaskResponseModel taskResponseModel = taskService.alterTaskState(taskId, taskStateRequestModel);
         return ResponseEntity.ok(taskResponseModel);
+    }
+
+    @PatchMapping(value = "update/{taskId}")
+    public ResponseEntity<TaskResponseModel> updateTask(@Valid @RequestBody TaskUpdateRequestModel taskUpdateRequestModel,
+                                                        @PathVariable String taskId) {
+        TaskResponseModel taskResponseModel = taskService.updateTask(taskUpdateRequestModel, taskId);
+        return ResponseEntity.ok(taskResponseModel);    
+
     }
 
 }

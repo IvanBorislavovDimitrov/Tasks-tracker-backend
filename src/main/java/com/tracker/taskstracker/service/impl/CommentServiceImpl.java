@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.tracker.taskstracker.domain.*;
 import com.tracker.taskstracker.exception.TRException;
 import com.tracker.taskstracker.model.request.CommentRequestModel;
+import com.tracker.taskstracker.model.request.CommentUpdateRequestModel;
 import com.tracker.taskstracker.model.request.ProjectCommentRequestModel;
 import com.tracker.taskstracker.model.request.TaskCommentRequestModel;
 import com.tracker.taskstracker.model.response.CommentResponseModel;
@@ -73,6 +74,15 @@ public class CommentServiceImpl extends GenericServiceImpl<Comment, CommentReque
         taskComment.setAuthor(author);
         TaskComment savedTaskComment = commentRepository.save(taskComment);
         return modelMapper.map(savedTaskComment, TaskCommentResponseModel.class);
+    }
+
+    @Override
+    public ProjectCommentResponseModel updateProjectComment(CommentUpdateRequestModel commentUpdateRequestModel, String commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                                           .orElseThrow(() -> new TRException("Comment not found"));
+        comment.setDescription(commentUpdateRequestModel.getDescription());
+        comment.setUpdatedAt(new Date());
+        return modelMapper.map(commentRepository.save(comment), ProjectCommentResponseModel.class);
     }
 
     @Override

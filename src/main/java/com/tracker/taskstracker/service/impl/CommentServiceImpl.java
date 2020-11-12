@@ -86,6 +86,14 @@ public class CommentServiceImpl extends GenericServiceImpl<Comment, CommentReque
     }
 
     @Override
+    public ProjectCommentResponseModel  deleteProjectCommentById(String commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                                           .orElseThrow(() -> new TRException("Comment not found"));
+        commentRepository.delete(comment);
+        return modelMapper.map(comment, ProjectCommentResponseModel.class);
+    }
+
+    @Override
     protected Class<Comment> getEntityClass() {
         return Comment.class;
     }

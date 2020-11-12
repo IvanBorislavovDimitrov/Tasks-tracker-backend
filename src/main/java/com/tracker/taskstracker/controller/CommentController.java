@@ -55,4 +55,10 @@ public class CommentController {
         CommentResponseModel commentResponseModel = commentService.updateProjectComment(commentUpdateRequestModel, commentId);
         return ResponseEntity.ok(commentResponseModel);
     }
+
+    @DeleteMapping(value = "/delete/{commentId}")
+    public ResponseEntity<ProjectCommentResponseModel> deleteProjectCommentById(@PathVariable String commentId) {
+        ProjectCommentResponseModel commentResponseModel = commentService.deleteProjectCommentById(commentId);
+        return ResponseEntity.ok(commentResponseModel);
+    }
 }

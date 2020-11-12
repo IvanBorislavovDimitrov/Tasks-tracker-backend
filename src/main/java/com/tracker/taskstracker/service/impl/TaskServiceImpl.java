@@ -10,12 +10,15 @@ import org.springframework.stereotype.Service;
 
 import com.tracker.taskstracker.domain.Project;
 import com.tracker.taskstracker.domain.Task;
+import com.tracker.taskstracker.domain.User;
 import com.tracker.taskstracker.exception.TRException;
 import com.tracker.taskstracker.model.request.TaskRequestModel;
+import com.tracker.taskstracker.model.request.TaskStateRequestModel;
 import com.tracker.taskstracker.model.response.TaskResponseModel;
 import com.tracker.taskstracker.model.response.TaskResponseModelExtended;
 import com.tracker.taskstracker.repository.ProjectRepository;
 import com.tracker.taskstracker.repository.TaskRepository;
+import com.tracker.taskstracker.repository.UserRepository;
 import com.tracker.taskstracker.service.api.TaskService;
 
 @Service
@@ -23,12 +26,15 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
 
     private final TaskRepository taskRepository;
     private final ProjectRepository projectRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public TaskServiceImpl(TaskRepository taskRepository, ModelMapper modelMapper, ProjectRepository projectRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository, ModelMapper modelMapper, ProjectRepository projectRepository,
+                           UserRepository userRepository) {
         super(taskRepository, modelMapper);
         this.projectRepository = projectRepository;
         this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -65,6 +71,24 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
         Task task = taskRepository.findById(taskId)
                                   .orElseThrow(() -> new TRException("Task not found"));
         return modelMapper.map(task, TaskResponseModelExtended.class);
+    }
+
+    @Override
+    public TaskResponseModel assignTaskToUser(String taskId, String username) {
+        Task task = taskRepository.findById(taskId)
+                                  .orElseThrow(() -> new TRException("Task not found"));
+        User user = userRepository.findByUsername(username);
+        task.setAssignee(user);
+        return modelMapper.map(taskRepository.save(task), TaskResponseModel.class);
+    }
+
+    @Override
+    public TaskResponseModel alterTaskState(String taskId, TaskStateRequestModel taskStateRequestModel) {
+        Task task = taskRepository.findById(taskId)
+                                  .orElseThrow(() -> new TRException("Task not found"));
+        Task.State state = Task.State.fromString(taskStateRequestModel.getState());
+        task.setState(state);
+        return modelMapper.map(taskRepository.save(task), TaskResponseModel.class);
     }
 
     @Override

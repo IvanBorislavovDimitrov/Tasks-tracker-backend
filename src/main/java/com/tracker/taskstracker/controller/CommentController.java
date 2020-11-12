@@ -52,13 +52,15 @@ public class CommentController {
     @PatchMapping(value = "/update/{commentId}")
     public ResponseEntity<CommentResponseModel> editProjectComment(@Valid @RequestBody CommentUpdateRequestModel commentUpdateRequestModel,
                                                                    @PathVariable String commentId) {
-        CommentResponseModel commentResponseModel = commentService.updateProjectComment(commentUpdateRequestModel, commentId);
+        String username = loggedUserGetter.getUsername();
+        CommentResponseModel commentResponseModel = commentService.updateProjectComment(commentUpdateRequestModel, commentId, username);
         return ResponseEntity.ok(commentResponseModel);
     }
 
     @DeleteMapping(value = "/delete/{commentId}")
     public ResponseEntity<ProjectCommentResponseModel> deleteProjectCommentById(@PathVariable String commentId) {
-        ProjectCommentResponseModel commentResponseModel = commentService.deleteProjectCommentById(commentId);
+        String username = loggedUserGetter.getUsername();
+        ProjectCommentResponseModel commentResponseModel = commentService.deleteProjectCommentById(commentId, username);
         return ResponseEntity.ok(commentResponseModel);
     }
 }

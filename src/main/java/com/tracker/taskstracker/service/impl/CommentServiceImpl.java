@@ -1,10 +1,13 @@
 package com.tracker.taskstracker.service.impl;
 
 import java.util.Date;
+import java.util.Objects;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.tracker.taskstracker.domain.*;
 import com.tracker.taskstracker.exception.TRException;
@@ -77,18 +80,29 @@ public class CommentServiceImpl extends GenericServiceImpl<Comment, CommentReque
     }
 
     @Override
-    public ProjectCommentResponseModel updateProjectComment(CommentUpdateRequestModel commentUpdateRequestModel, String commentId) {
+    public ProjectCommentResponseModel updateProjectComment(CommentUpdateRequestModel commentUpdateRequestModel, String commentId,
+                                                            String username) {
         Comment comment = commentRepository.findById(commentId)
                                            .orElseThrow(() -> new TRException("Comment not found"));
+        if (!Objects.equals(comment.getAuthor()
+                                   .getUsername(),
+                            username)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
         comment.setDescription(commentUpdateRequestModel.getDescription());
         comment.setUpdatedAt(new Date());
         return modelMapper.map(commentRepository.save(comment), ProjectCommentResponseModel.class);
     }
 
     @Override
-    public ProjectCommentResponseModel  deleteProjectCommentById(String commentId) {
+    public ProjectCommentResponseModel deleteProjectCommentById(String commentId, String username) {
         Comment comment = commentRepository.findById(commentId)
                                            .orElseThrow(() -> new TRException("Comment not found"));
+        if (!Objects.equals(comment.getAuthor()
+                                   .getUsername(),
+                            username)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
         commentRepository.delete(comment);
         return modelMapper.map(comment, ProjectCommentResponseModel.class);
     }

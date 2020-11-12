@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.tracker.taskstracker.domain.Project;
 import com.tracker.taskstracker.domain.Task;
+import com.tracker.taskstracker.exception.TRException;
 import com.tracker.taskstracker.model.request.TaskRequestModel;
 import com.tracker.taskstracker.model.response.TaskResponseModel;
+import com.tracker.taskstracker.model.response.TaskResponseModelExtended;
 import com.tracker.taskstracker.repository.ProjectRepository;
 import com.tracker.taskstracker.repository.TaskRepository;
 import com.tracker.taskstracker.service.api.TaskService;
@@ -56,6 +58,13 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
     private void setDefaultDates(Task task) {
         task.setCreatedAt(new Date());
         task.setUpdatedAt(new Date());
+    }
+
+    @Override
+    public TaskResponseModel findTaskExtendedById(String taskId) {
+        Task task = taskRepository.findById(taskId)
+                                  .orElseThrow(() -> new TRException("Task not found"));
+        return modelMapper.map(task, TaskResponseModelExtended.class);
     }
 
     @Override

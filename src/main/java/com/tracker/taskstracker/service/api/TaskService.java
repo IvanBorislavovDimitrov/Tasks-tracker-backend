@@ -8,4 +8,6 @@ import com.tracker.taskstracker.model.response.TaskResponseModel;
 public interface TaskService extends GenericService<TaskRequestModel, TaskResponseModel, String> {
 
     List<TaskResponseModel> findTasksByProjectId(String projectId);
+
+    TaskResponseModel findTaskExtendedById(String taskId);
 }

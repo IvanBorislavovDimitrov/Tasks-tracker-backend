@@ -35,4 +35,11 @@ public class TaskController {
         List<TaskResponseModel> taskResponseModels = taskService.findTasksByProjectId(projectId);
         return ResponseEntity.ok(taskResponseModels);
     }
+
+    @GetMapping(value = "/{taskId}")
+    public ResponseEntity<TaskResponseModel> getExtendedTaskById(@PathVariable String taskId) {
+        TaskResponseModel taskResponseModel = taskService.findTaskExtendedById(taskId);
+        return ResponseEntity.ok(taskResponseModel);
+    }
+
 }

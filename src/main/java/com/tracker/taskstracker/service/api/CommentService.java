@@ -14,7 +14,12 @@ public interface CommentService extends GenericService<CommentRequestModel, Comm
 
     TaskCommentResponseModel save(TaskCommentRequestModel taskCommentRequestModel, String authorName);
 
-    ProjectCommentResponseModel updateProjectComment(CommentUpdateRequestModel commentUpdateRequestModel, String commentId, String username);
+    ProjectCommentResponseModel updateProjectComment(CommentUpdateRequestModel commentUpdateRequestModel, String commentId,
+                                                     String username);
 
     ProjectCommentResponseModel deleteProjectCommentById(String commentId, String username);
+
+    TaskCommentResponseModel deleteTaskCommentById(String commentId, String username);
+
+    CommentResponseModel updateTaskProjectComment(CommentUpdateRequestModel commentUpdateRequestModel, String commentId, String username);
 }

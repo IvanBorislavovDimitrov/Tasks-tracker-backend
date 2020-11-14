@@ -49,7 +49,7 @@ public class CommentController {
         return ResponseEntity.ok(commentResponseModel);
     }
 
-    @PatchMapping(value = "/update/{commentId}")
+    @PatchMapping(value = "/update/project/{commentId}")
     public ResponseEntity<CommentResponseModel> editProjectComment(@Valid @RequestBody CommentUpdateRequestModel commentUpdateRequestModel,
                                                                    @PathVariable String commentId) {
         String username = loggedUserGetter.getUsername();
@@ -57,10 +57,25 @@ public class CommentController {
         return ResponseEntity.ok(commentResponseModel);
     }
 
-    @DeleteMapping(value = "/delete/{commentId}")
+    @PatchMapping(value = "/update/task/{commentId}")
+    public ResponseEntity<CommentResponseModel> editTaskComment(@Valid @RequestBody CommentUpdateRequestModel commentUpdateRequestModel,
+                                                                   @PathVariable String commentId) {
+        String username = loggedUserGetter.getUsername();
+        CommentResponseModel commentResponseModel = commentService.updateTaskProjectComment(commentUpdateRequestModel, commentId, username);
+        return ResponseEntity.ok(commentResponseModel);
+    }
+
+    @DeleteMapping(value = "/delete/project/{commentId}")
     public ResponseEntity<ProjectCommentResponseModel> deleteProjectCommentById(@PathVariable String commentId) {
         String username = loggedUserGetter.getUsername();
         ProjectCommentResponseModel commentResponseModel = commentService.deleteProjectCommentById(commentId, username);
         return ResponseEntity.ok(commentResponseModel);
+    }
+
+    @DeleteMapping(value = "/delete/task/{commentId}")
+    public ResponseEntity<TaskCommentResponseModel> deleteTaskCommentById(@PathVariable String commentId) {
+        String username = loggedUserGetter.getUsername();
+        TaskCommentResponseModel taskCommentResponseModel = commentService.deleteTaskCommentById(commentId, username);
+        return ResponseEntity.ok(taskCommentResponseModel);
     }
 }

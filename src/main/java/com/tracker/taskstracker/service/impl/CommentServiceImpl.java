@@ -44,11 +44,6 @@ public class CommentServiceImpl extends GenericServiceImpl<Comment, CommentReque
     }
 
     @Override
-    public Class<CommentResponseModel> getOutputModelClass() {
-        return CommentResponseModel.class;
-    }
-
-    @Override
     public ProjectCommentResponseModel save(ProjectCommentRequestModel projectCommentRequestModel, String authorName) {
         Project project = projectRepository.findById(projectCommentRequestModel.getProjectId())
                                            .orElseThrow(() -> new TRException("Project not found!"));
@@ -82,6 +77,11 @@ public class CommentServiceImpl extends GenericServiceImpl<Comment, CommentReque
     @Override
     public ProjectCommentResponseModel updateProjectComment(CommentUpdateRequestModel commentUpdateRequestModel, String commentId,
                                                             String username) {
+        Comment comment = updateCommentDescription(commentUpdateRequestModel, commentId, username);
+        return modelMapper.map(commentRepository.save(comment), ProjectCommentResponseModel.class);
+    }
+
+    private Comment updateCommentDescription(CommentUpdateRequestModel commentUpdateRequestModel, String commentId, String username) {
         Comment comment = commentRepository.findById(commentId)
                                            .orElseThrow(() -> new TRException("Comment not found"));
         if (!Objects.equals(comment.getAuthor()
@@ -91,7 +91,7 @@ public class CommentServiceImpl extends GenericServiceImpl<Comment, CommentReque
         }
         comment.setDescription(commentUpdateRequestModel.getDescription());
         comment.setUpdatedAt(new Date());
-        return modelMapper.map(commentRepository.save(comment), ProjectCommentResponseModel.class);
+        return comment;
     }
 
     @Override
@@ -108,8 +108,34 @@ public class CommentServiceImpl extends GenericServiceImpl<Comment, CommentReque
     }
 
     @Override
+    public TaskCommentResponseModel deleteTaskCommentById(String commentId, String username) {
+        Comment comment = commentRepository.findById(commentId)
+                                           .orElseThrow(() -> new TRException("Comment not found"));
+        if (!Objects.equals(comment.getAuthor()
+                                   .getUsername(),
+                            username)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+        commentRepository.delete(comment);
+        return modelMapper.map(comment, TaskCommentResponseModel.class);
+    }
+
+    @Override
+    public CommentResponseModel updateTaskProjectComment(CommentUpdateRequestModel commentUpdateRequestModel, String commentId,
+                                                         String username) {
+        Comment comment = updateCommentDescription(commentUpdateRequestModel, commentId, username);
+        return modelMapper.map(commentRepository.save(comment), TaskCommentResponseModel.class);
+
+    }
+
+    @Override
     protected Class<Comment> getEntityClass() {
         return Comment.class;
+    }
+
+    @Override
+    public Class<CommentResponseModel> getOutputModelClass() {
+        return CommentResponseModel.class;
     }
 
 }

@@ -28,6 +28,12 @@ public class ProjectController {
         this.loggedUserGetter = loggedUserGetter;
     }
 
+    @GetMapping
+    public ResponseEntity<List<ProjectResponseModel>> getAllProjects() {
+        List<ProjectResponseModel> projectResponseModels = projectService.findAll();
+        return ResponseEntity.ok(projectResponseModels);
+    }
+
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ProjectResponseModel> create(@Valid @ModelAttribute ProjectRequestModel projectRequestModel) {
         return ResponseEntity.ok(projectService.save(projectRequestModel));

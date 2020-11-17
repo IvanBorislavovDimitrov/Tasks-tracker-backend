@@ -111,6 +111,14 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
     }
 
     @Override
+    public List<TaskResponseModel> getTaskByUsername(String username) {
+        List<Task> tasksByUsername = taskRepository.findAllByAssigneeUsername(username);
+        return tasksByUsername.stream()
+                              .map(task -> modelMapper.map(task, TaskResponseModel.class))
+                              .collect(Collectors.toList());
+    }
+
+    @Override
     protected Class<TaskResponseModel> getOutputModelClass() {
         return TaskResponseModel.class;
     }

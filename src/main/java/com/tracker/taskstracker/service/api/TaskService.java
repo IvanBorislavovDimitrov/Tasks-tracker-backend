@@ -21,4 +21,6 @@ public interface TaskService extends GenericService<TaskRequestModel, TaskRespon
 
     TaskResponseModel deleteTaskById(String taskId);
 
+    List<TaskResponseModel> getTaskByUsername(String username);
+
 }

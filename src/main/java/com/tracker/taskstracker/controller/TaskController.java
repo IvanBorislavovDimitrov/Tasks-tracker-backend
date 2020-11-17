@@ -66,13 +66,19 @@ public class TaskController {
                                                         @PathVariable String taskId) {
         TaskResponseModel taskResponseModel = taskService.updateTask(taskUpdateRequestModel, taskId);
         return ResponseEntity.ok(taskResponseModel);
-
     }
 
     @DeleteMapping(value = "/delete/{taskId}")
     public ResponseEntity<TaskResponseModel> deleteTask(@PathVariable String taskId) {
         TaskResponseModel taskResponseModel = taskService.deleteTaskById(taskId);
         return ResponseEntity.ok(taskResponseModel);
+    }
+
+    @GetMapping(value = "/my-tasks")
+    public ResponseEntity<List<TaskResponseModel>> getMyTasks() {
+        String username = loggedUserGetter.getUsername();
+        List<TaskResponseModel> tasksResponseModels = taskService.getTaskByUsername(username);
+        return ResponseEntity.ok(tasksResponseModels);
     }
 
 }

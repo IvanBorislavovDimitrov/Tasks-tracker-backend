@@ -40,10 +40,11 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
 
     @Override
     public ProjectResponseModel save(ProjectRequestModel projectRequestModel) {
+        String pictureName = projectRequestModel.getName() + getFileExtension(projectRequestModel.getPicture());
         modelMapper.addMappings(new PropertyMap<ProjectRequestModel, Project>() {
             @Override
             protected void configure() {
-                map().setPictureName(source.getName() + getFileExtension(projectRequestModel.getPicture()));
+                map().setPictureName(pictureName);
             }
         });
         fileService.save(projectRequestModel.getName(), projectRequestModel.getPicture());

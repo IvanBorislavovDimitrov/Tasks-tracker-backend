@@ -1,5 +1,8 @@
 package com.tracker.taskstracker.domain;
 
+import com.tracker.taskstracker.exception.TRException;
+
+import javax.persistence.*;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,10 +11,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import javax.persistence.*;
-
-import com.tracker.taskstracker.exception.TRException;
 
 @Entity
 @Table(name = "tasks")
@@ -35,6 +34,9 @@ public class Task extends IdEntity {
     private Project project;
     @OneToMany(mappedBy = "task", targetEntity = TaskComment.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> taskComments = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "release_id", referencedColumnName = "id")
+    private Release release;
 
     public String getName() {
         return name;
@@ -100,6 +102,14 @@ public class Task extends IdEntity {
         this.taskComments = taskComments;
     }
 
+    public Release getRelease() {
+        return release;
+    }
+
+    public void setRelease(Release release) {
+        this.release = release;
+    }
+
     public void addComment(TaskComment taskComment) {
         taskComments.add(taskComment);
     }
@@ -109,9 +119,9 @@ public class Task extends IdEntity {
         BACKLOG, SELECTED, IN_PROGRESS, BLOCKED, COMPLETED, RELEASED;
 
         private final static Map<String, State> NAMES_TO_VALUES = Stream.of(values())
-                                                                        .collect(Collectors.toMap(value -> value.toString()
-                                                                                                                .toLowerCase(),
-                                                                                                  Function.identity()));
+                .collect(Collectors.toMap(value -> value.toString()
+                                .toLowerCase(),
+                        Function.identity()));
 
         public static State fromString(String name) {
             State state = NAMES_TO_VALUES.get(name);

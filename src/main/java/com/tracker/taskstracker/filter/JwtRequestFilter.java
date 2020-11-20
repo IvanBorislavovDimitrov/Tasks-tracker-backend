@@ -1,12 +1,7 @@
 package com.tracker.taskstracker.filter;
 
-import java.io.IOException;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.tracker.taskstracker.jwt.JwtUtil;
+import com.tracker.taskstracker.service.api.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,8 +11,11 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.tracker.taskstracker.jwt.JwtUtil;
-import com.tracker.taskstracker.service.api.UserService;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 // TODO: validate user role depending on the uri
 @Component
@@ -32,7 +30,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         String authorizationHeader = request.getHeader("Authorization");
         String jwt = null;
         String username = null;
@@ -41,7 +39,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             username = JwtUtil.extractUsername(jwt);
         }
         if (username != null && SecurityContextHolder.getContext()
-                                                     .getAuthentication() == null) {
+                .getAuthentication() == null) {
             UserDetails userDetails = userService.loadUserByUsername(username);
             if (userDetails == null) {
                 filterChain.doFilter(request, response);
@@ -49,11 +47,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
             if (JwtUtil.validateToken(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,
-                                                                                                                                  null,
-                                                                                                                                  userDetails.getAuthorities());
+                        null,
+                        userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext()
-                                     .setAuthentication(usernamePasswordAuthenticationToken);
+                        .setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
         filterChain.doFilter(request, response);

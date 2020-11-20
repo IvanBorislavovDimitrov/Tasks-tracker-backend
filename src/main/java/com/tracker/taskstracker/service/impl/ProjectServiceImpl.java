@@ -1,14 +1,5 @@
 package com.tracker.taskstracker.service.impl;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.tracker.taskstracker.domain.Project;
 import com.tracker.taskstracker.domain.User;
 import com.tracker.taskstracker.exception.TRException;
@@ -20,10 +11,18 @@ import com.tracker.taskstracker.repository.ProjectRepository;
 import com.tracker.taskstracker.repository.UserRepository;
 import com.tracker.taskstracker.service.api.FileService;
 import com.tracker.taskstracker.service.api.ProjectService;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectRequestModel, ProjectResponseModel, String>
-    implements ProjectService {
+        implements ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
@@ -53,8 +52,8 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
 
     private String getFileExtension(MultipartFile file) {
         return file.getOriginalFilename()
-                   .substring(file.getOriginalFilename()
-                                  .lastIndexOf("."));
+                .substring(file.getOriginalFilename()
+                        .lastIndexOf("."));
     }
 
     @Override
@@ -72,21 +71,21 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
     public List<ProjectResponseModel> findProjectsByUsername(String username) {
         List<Project> projects = projectRepository.findAllByUsersUsername(username);
         return projects.stream()
-                       .map(project -> modelMapper.map(project, ProjectResponseModel.class))
-                       .collect(Collectors.toList());
+                .map(project -> modelMapper.map(project, ProjectResponseModel.class))
+                .collect(Collectors.toList());
     }
 
     @Override
     public ProjectResponseModel findProjectById(String projectId) {
         Project project = projectRepository.findById(projectId)
-                                           .orElseThrow(() -> new TRException("Project not found"));
+                .orElseThrow(() -> new TRException("Project not found"));
         return modelMapper.map(project, ProjectResponseModelExtended.class);
     }
 
     @Override
     public String findProjectPictureName(String projectId) {
         Project project = projectRepository.findById(projectId)
-                                           .orElseThrow(() -> new TRException("Project not found"));
+                .orElseThrow(() -> new TRException("Project not found"));
         return project.getPictureName();
     }
 

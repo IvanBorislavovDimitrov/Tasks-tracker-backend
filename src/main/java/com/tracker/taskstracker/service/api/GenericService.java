@@ -1,8 +1,8 @@
 package com.tracker.taskstracker.service.api;
 
-import java.util.List;
-
 import com.tracker.taskstracker.model.response.IdModel;
+
+import java.util.List;
 
 public interface GenericService<IM, OM extends IdModel, ID> {
 

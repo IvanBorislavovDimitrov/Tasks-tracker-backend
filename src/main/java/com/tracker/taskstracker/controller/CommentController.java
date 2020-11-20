@@ -1,12 +1,5 @@
 package com.tracker.taskstracker.controller;
 
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.tracker.taskstracker.model.request.CommentUpdateRequestModel;
 import com.tracker.taskstracker.model.request.ProjectCommentRequestModel;
 import com.tracker.taskstracker.model.request.TaskCommentRequestModel;
@@ -15,6 +8,12 @@ import com.tracker.taskstracker.model.response.ProjectCommentResponseModel;
 import com.tracker.taskstracker.model.response.TaskCommentResponseModel;
 import com.tracker.taskstracker.service.api.CommentService;
 import com.tracker.taskstracker.util.LoggedUserGetter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/comments", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -31,9 +30,9 @@ public class CommentController {
 
     @PostMapping(value = "/project")
     public ResponseEntity<ProjectCommentResponseModel>
-           createProjectComment(@Valid @RequestBody ProjectCommentRequestModel projectCommentRequestModel) {
+    createProjectComment(@Valid @RequestBody ProjectCommentRequestModel projectCommentRequestModel) {
         ProjectCommentResponseModel projectCommentResponseModel = commentService.save(projectCommentRequestModel,
-                                                                                      loggedUserGetter.getUsername());
+                loggedUserGetter.getUsername());
         return ResponseEntity.ok(projectCommentResponseModel);
     }
 
@@ -59,7 +58,7 @@ public class CommentController {
 
     @PatchMapping(value = "/update/task/{commentId}")
     public ResponseEntity<CommentResponseModel> editTaskComment(@Valid @RequestBody CommentUpdateRequestModel commentUpdateRequestModel,
-                                                                   @PathVariable String commentId) {
+                                                                @PathVariable String commentId) {
         String username = loggedUserGetter.getUsername();
         CommentResponseModel commentResponseModel = commentService.updateTaskProjectComment(commentUpdateRequestModel, commentId, username);
         return ResponseEntity.ok(commentResponseModel);

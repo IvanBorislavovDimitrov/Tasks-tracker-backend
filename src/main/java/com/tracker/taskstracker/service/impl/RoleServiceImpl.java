@@ -1,20 +1,18 @@
 package com.tracker.taskstracker.service.impl;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.annotation.PostConstruct;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.tracker.taskstracker.domain.Role;
 import com.tracker.taskstracker.model.request.RoleRequestModel;
 import com.tracker.taskstracker.model.response.RoleResponseModel;
 import com.tracker.taskstracker.repository.RoleRepository;
 import com.tracker.taskstracker.service.api.RoleService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class RoleServiceImpl extends GenericServiceImpl<Role, RoleRequestModel, RoleResponseModel, String> implements RoleService {
@@ -36,8 +34,8 @@ public class RoleServiceImpl extends GenericServiceImpl<Role, RoleRequestModel, 
 
     private List<Role> getDefaultRoles() {
         return Stream.of(Role.Type.values())
-                     .map(this::createRole)
-                     .collect(Collectors.toList());
+                .map(this::createRole)
+                .collect(Collectors.toList());
     }
 
     private Role createRole(Role.Type type) {

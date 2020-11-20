@@ -1,20 +1,18 @@
 package com.tracker.taskstracker.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.tracker.taskstracker.model.request.TaskRequestModel;
 import com.tracker.taskstracker.model.request.TaskStateRequestModel;
 import com.tracker.taskstracker.model.request.TaskUpdateRequestModel;
 import com.tracker.taskstracker.model.response.TaskResponseModel;
 import com.tracker.taskstracker.service.api.TaskService;
 import com.tracker.taskstracker.util.LoggedUserGetter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/tasks", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

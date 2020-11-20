@@ -1,18 +1,16 @@
 package com.tracker.taskstracker.jwt;
 
+import com.tracker.taskstracker.model.response.UserResponseModel;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
-
-import org.springframework.security.core.userdetails.UserDetails;
-
-import com.tracker.taskstracker.model.response.UserResponseModel;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 public class JwtUtil {
 
@@ -27,12 +25,12 @@ public class JwtUtil {
 
     private static String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
-                   .setClaims(claims)
-                   .setSubject(subject)
-                   .setIssuedAt(new Date())
-                   .setExpiration(new Date(JWT_TOKEN_EXPIRATION))
-                   .signWith(SignatureAlgorithm.HS256, SECRET)
-                   .compact();
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(JWT_TOKEN_EXPIRATION))
+                .signWith(SignatureAlgorithm.HS256, SECRET)
+                .compact();
     }
 
     public static String extractUsername(String token) {
@@ -50,9 +48,9 @@ public class JwtUtil {
 
     private static Claims extractAllClaims(String token) {
         return Jwts.parser()
-                   .setSigningKey(SECRET)
-                   .parseClaimsJws(token)
-                   .getBody();
+                .setSigningKey(SECRET)
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     public static boolean validateToken(String token, UserDetails userDetails) {

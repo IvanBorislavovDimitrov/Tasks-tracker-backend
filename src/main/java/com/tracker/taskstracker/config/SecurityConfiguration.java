@@ -1,5 +1,8 @@
 package com.tracker.taskstracker.config;
 
+import com.tracker.taskstracker.domain.Role;
+import com.tracker.taskstracker.filter.JwtRequestFilter;
+import com.tracker.taskstracker.service.api.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,10 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
-import com.tracker.taskstracker.domain.Role;
-import com.tracker.taskstracker.filter.JwtRequestFilter;
-import com.tracker.taskstracker.service.api.UserService;
 
 @Configuration
 @EnableWebSecurity
@@ -36,26 +35,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors()
-            .and()
-            .csrf()
-            .disable()
-            .authorizeRequests()
-            .antMatchers("/authenticate", "/", "/users/register")
-            .permitAll()
-            .and()
-            .authorizeRequests()
-            .antMatchers("/tasks/create", "/projects/create", "/project/add-user-to-project")
-            .hasRole(Role.Type.ADMIN.toString())
-            .and()
-            .authorizeRequests()
-            .anyRequest()
-            .authenticated()
-            .and()
-            .userDetailsService(userService)
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .and()
+                .csrf()
+                .disable()
+                .authorizeRequests()
+                .antMatchers("/authenticate", "/", "/users/register")
+                .permitAll()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/tasks/create", "/projects/create", "/project/add-user-to-project")
+                .hasRole(Role.Type.ADMIN.toString())
+                .and()
+                .authorizeRequests()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .userDetailsService(userService)
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

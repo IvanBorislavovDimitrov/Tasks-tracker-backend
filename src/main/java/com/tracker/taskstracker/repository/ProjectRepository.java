@@ -1,10 +1,9 @@
 package com.tracker.taskstracker.repository;
 
-import java.util.List;
-
+import com.tracker.taskstracker.domain.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.tracker.taskstracker.domain.Project;
+import java.util.List;
 
 public interface ProjectRepository extends JpaRepository<Project, String> {
 

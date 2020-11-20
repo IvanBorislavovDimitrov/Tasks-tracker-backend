@@ -1,9 +1,8 @@
 package com.tracker.taskstracker.domain;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.*;
 
 @Entity
 @Table(name = "projects")
@@ -22,6 +21,8 @@ public class Project extends IdEntity {
     private List<Task> tasks = new ArrayList<>();
     @OneToMany(mappedBy = "project", targetEntity = ProjectComment.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> projectComments = new ArrayList<>();
+    @OneToMany(mappedBy = "project", targetEntity = Release.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Release> releases = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -71,6 +72,14 @@ public class Project extends IdEntity {
         this.pictureName = pictureName;
     }
 
+    public List<Release> getReleases() {
+        return releases;
+    }
+
+    public void setReleases(List<Release> releases) {
+        this.releases = releases;
+    }
+
     public void addTask(Task task) {
         tasks.add(task);
     }
@@ -81,6 +90,10 @@ public class Project extends IdEntity {
 
     public void addComment(ProjectComment projectComment) {
         projectComments.add(projectComment);
+    }
+
+    public void addRelease(Release release) {
+        releases.add(release);
     }
 
 }

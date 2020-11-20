@@ -1,17 +1,16 @@
 package com.tracker.taskstracker.service.impl;
 
-import java.text.MessageFormat;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.tracker.taskstracker.domain.IdEntity;
 import com.tracker.taskstracker.exception.TRException;
 import com.tracker.taskstracker.model.response.IdModel;
 import com.tracker.taskstracker.service.api.GenericService;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public abstract class GenericServiceImpl<E extends IdEntity, IM, OM extends IdModel, ID> implements GenericService<IM, OM, ID> {
 
@@ -26,9 +25,9 @@ public abstract class GenericServiceImpl<E extends IdEntity, IM, OM extends IdMo
     @Override
     public List<OM> findAll() {
         return repository.findAll()
-                         .stream()
-                         .map(entity -> modelMapper.map(entity, getOutputModelClass()))
-                         .collect(Collectors.toList());
+                .stream()
+                .map(entity -> modelMapper.map(entity, getOutputModelClass()))
+                .collect(Collectors.toList());
     }
 
     @Override

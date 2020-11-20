@@ -1,13 +1,5 @@
 package com.tracker.taskstracker.service.impl;
 
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.tracker.taskstracker.domain.Project;
 import com.tracker.taskstracker.domain.Task;
 import com.tracker.taskstracker.domain.User;
@@ -21,6 +13,13 @@ import com.tracker.taskstracker.repository.ProjectRepository;
 import com.tracker.taskstracker.repository.TaskRepository;
 import com.tracker.taskstracker.repository.UserRepository;
 import com.tracker.taskstracker.service.api.TaskService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, TaskResponseModel, String> implements TaskService {
@@ -54,8 +53,8 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
     public List<TaskResponseModel> findTasksByProjectId(String projectId) {
         List<Task> tasks = taskRepository.findAllByProjectId(projectId);
         return tasks.stream()
-                    .map(task -> modelMapper.map(task, TaskResponseModel.class))
-                    .collect(Collectors.toList());
+                .map(task -> modelMapper.map(task, TaskResponseModel.class))
+                .collect(Collectors.toList());
     }
 
     private void setDefaultTaskState(Task task) {
@@ -70,14 +69,14 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
     @Override
     public TaskResponseModel findTaskExtendedById(String taskId) {
         Task task = taskRepository.findById(taskId)
-                                  .orElseThrow(() -> new TRException("Task not found"));
+                .orElseThrow(() -> new TRException("Task not found"));
         return modelMapper.map(task, TaskResponseModelExtended.class);
     }
 
     @Override
     public TaskResponseModel assignTaskToUser(String taskId, String username) {
         Task task = taskRepository.findById(taskId)
-                                  .orElseThrow(() -> new TRException("Task not found"));
+                .orElseThrow(() -> new TRException("Task not found"));
         User user = userRepository.findByUsername(username);
         task.setAssignee(user);
         return modelMapper.map(taskRepository.save(task), TaskResponseModel.class);
@@ -86,7 +85,7 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
     @Override
     public TaskResponseModel alterTaskState(String taskId, TaskStateRequestModel taskStateRequestModel) {
         Task task = taskRepository.findById(taskId)
-                                  .orElseThrow(() -> new TRException("Task not found"));
+                .orElseThrow(() -> new TRException("Task not found"));
         Task.State state = Task.State.fromString(taskStateRequestModel.getState());
         task.setState(state);
         return modelMapper.map(taskRepository.save(task), TaskResponseModel.class);
@@ -95,7 +94,7 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
     @Override
     public TaskResponseModel updateTask(TaskUpdateRequestModel taskUpdateRequestModel, String taskId) {
         Task task = taskRepository.findById(taskId)
-                                  .orElseThrow(() -> new TRException("Task not found"));
+                .orElseThrow(() -> new TRException("Task not found"));
         task.setName(taskUpdateRequestModel.getName());
         task.setDescription(taskUpdateRequestModel.getDescription());
         return modelMapper.map(taskRepository.save(task), TaskResponseModel.class);
@@ -104,7 +103,7 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
     @Override
     public TaskResponseModel deleteTaskById(String taskId) {
         Task task = taskRepository.findById(taskId)
-                                  .orElseThrow(() -> new TRException("Task not found"));
+                .orElseThrow(() -> new TRException("Task not found"));
         TaskResponseModel taskResponseModel = modelMapper.map(task, TaskResponseModel.class);
         taskRepository.delete(task);
         return taskResponseModel;
@@ -114,8 +113,8 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
     public List<TaskResponseModel> getTaskByUsername(String username) {
         List<Task> tasksByUsername = taskRepository.findAllByAssigneeUsername(username);
         return tasksByUsername.stream()
-                              .map(task -> modelMapper.map(task, TaskResponseModel.class))
-                              .collect(Collectors.toList());
+                .map(task -> modelMapper.map(task, TaskResponseModel.class))
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -9,8 +9,8 @@ public class LoggedUserGetter {
 
     public String getUsername() {
         Object principal = SecurityContextHolder.getContext()
-                                                .getAuthentication()
-                                                .getPrincipal();
+                .getAuthentication()
+                .getPrincipal();
         return ((UserDetails) principal).getUsername();
     }
 }

@@ -1,14 +1,13 @@
 package com.tracker.taskstracker.service.impl;
 
-import java.io.File;
-import java.io.IOException;
-
+import com.tracker.taskstracker.exception.TRException;
+import com.tracker.taskstracker.service.api.FileService;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.tracker.taskstracker.exception.TRException;
-import com.tracker.taskstracker.service.api.FileService;
+import java.io.File;
+import java.io.IOException;
 
 @Service
 public class FileServiceImpl implements FileService {

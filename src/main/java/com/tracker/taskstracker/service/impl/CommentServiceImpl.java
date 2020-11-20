@@ -1,14 +1,5 @@
 package com.tracker.taskstracker.service.impl;
 
-import java.util.Date;
-import java.util.Objects;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
 import com.tracker.taskstracker.domain.*;
 import com.tracker.taskstracker.exception.TRException;
 import com.tracker.taskstracker.model.request.CommentRequestModel;
@@ -23,10 +14,18 @@ import com.tracker.taskstracker.repository.ProjectRepository;
 import com.tracker.taskstracker.repository.TaskRepository;
 import com.tracker.taskstracker.repository.UserRepository;
 import com.tracker.taskstracker.service.api.CommentService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Date;
+import java.util.Objects;
 
 @Service
 public class CommentServiceImpl extends GenericServiceImpl<Comment, CommentRequestModel, CommentResponseModel, String>
-    implements CommentService {
+        implements CommentService {
 
     private final CommentRepository commentRepository;
     private final ProjectRepository projectRepository;
@@ -46,7 +45,7 @@ public class CommentServiceImpl extends GenericServiceImpl<Comment, CommentReque
     @Override
     public ProjectCommentResponseModel save(ProjectCommentRequestModel projectCommentRequestModel, String authorName) {
         Project project = projectRepository.findById(projectCommentRequestModel.getProjectId())
-                                           .orElseThrow(() -> new TRException("Project not found!"));
+                .orElseThrow(() -> new TRException("Project not found!"));
         ProjectComment projectComment = modelMapper.map(projectCommentRequestModel, ProjectComment.class);
         projectComment.setProject(project);
         updateCreatedAndUpdatedAt(projectComment);
@@ -64,7 +63,7 @@ public class CommentServiceImpl extends GenericServiceImpl<Comment, CommentReque
     @Override
     public TaskCommentResponseModel save(TaskCommentRequestModel taskCommentRequestModel, String authorName) {
         Task task = taskRepository.findById(taskCommentRequestModel.getTaskId())
-                                  .orElseThrow(() -> new TRException("Task not found!"));
+                .orElseThrow(() -> new TRException("Task not found!"));
         TaskComment taskComment = modelMapper.map(taskCommentRequestModel, TaskComment.class);
         taskComment.setTask(task);
         updateCreatedAndUpdatedAt(taskComment);
@@ -83,10 +82,10 @@ public class CommentServiceImpl extends GenericServiceImpl<Comment, CommentReque
 
     private Comment updateCommentDescription(CommentUpdateRequestModel commentUpdateRequestModel, String commentId, String username) {
         Comment comment = commentRepository.findById(commentId)
-                                           .orElseThrow(() -> new TRException("Comment not found"));
+                .orElseThrow(() -> new TRException("Comment not found"));
         if (!Objects.equals(comment.getAuthor()
-                                   .getUsername(),
-                            username)) {
+                        .getUsername(),
+                username)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         comment.setDescription(commentUpdateRequestModel.getDescription());
@@ -97,10 +96,10 @@ public class CommentServiceImpl extends GenericServiceImpl<Comment, CommentReque
     @Override
     public ProjectCommentResponseModel deleteProjectCommentById(String commentId, String username) {
         Comment comment = commentRepository.findById(commentId)
-                                           .orElseThrow(() -> new TRException("Comment not found"));
+                .orElseThrow(() -> new TRException("Comment not found"));
         if (!Objects.equals(comment.getAuthor()
-                                   .getUsername(),
-                            username)) {
+                        .getUsername(),
+                username)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         commentRepository.delete(comment);
@@ -110,10 +109,10 @@ public class CommentServiceImpl extends GenericServiceImpl<Comment, CommentReque
     @Override
     public TaskCommentResponseModel deleteTaskCommentById(String commentId, String username) {
         Comment comment = commentRepository.findById(commentId)
-                                           .orElseThrow(() -> new TRException("Comment not found"));
+                .orElseThrow(() -> new TRException("Comment not found"));
         if (!Objects.equals(comment.getAuthor()
-                                   .getUsername(),
-                            username)) {
+                        .getUsername(),
+                username)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         commentRepository.delete(comment);

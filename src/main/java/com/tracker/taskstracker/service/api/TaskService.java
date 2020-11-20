@@ -1,11 +1,11 @@
 package com.tracker.taskstracker.service.api;
 
-import java.util.List;
-
 import com.tracker.taskstracker.model.request.TaskRequestModel;
 import com.tracker.taskstracker.model.request.TaskStateRequestModel;
 import com.tracker.taskstracker.model.request.TaskUpdateRequestModel;
 import com.tracker.taskstracker.model.response.TaskResponseModel;
+
+import java.util.List;
 
 public interface TaskService extends GenericService<TaskRequestModel, TaskResponseModel, String> {
 

@@ -1,15 +1,14 @@
 package com.tracker.taskstracker.domain;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.persistence.*;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
@@ -69,8 +68,8 @@ public class User extends IdEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles().stream()
-                         .map(role -> new SimpleGrantedAuthority(role.getParsedRole()))
-                         .collect(Collectors.toList());
+                .map(role -> new SimpleGrantedAuthority(role.getParsedRole()))
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,7 @@ public class ReleaseServiceImpl extends GenericServiceImpl<Release, ReleaseReque
         Project project = projectRepository.findById(releaseRequestModel.getProjectId())
                 .orElseThrow(() -> new TRException("Project not found"));
         Release release = modelMapper.map(releaseRequestModel, Release.class);
+        release.setCreatedAt(new Date());
         release.setProject(project);
         project.addRelease(release);
         List<Task> completedTasks = project.getCompletedTasks();

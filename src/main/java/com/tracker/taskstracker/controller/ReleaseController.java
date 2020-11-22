@@ -28,7 +28,7 @@ public class ReleaseController {
         return ResponseEntity.ok(releaseResponseModel);
     }
 
-    @GetMapping(value = "/{projectId}")
+    @GetMapping(value = "/project/{projectId}")
     public ResponseEntity<List<ReleaseResponseModel>> getReleasesByProjectId(@PathVariable String projectId) {
         List<ReleaseResponseModel> releases = releaseService.findReleasesByProjectId(projectId);
         return ResponseEntity.ok(releases);

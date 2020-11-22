@@ -1,10 +1,12 @@
 package com.tracker.taskstracker.model.response;
 
+import java.util.Date;
 import java.util.List;
 
 public class ReleaseResponseModel extends IdModel {
 
     private String version;
+    private Date createdAt;
     private List<TaskResponseModel> tasks;
     private ProjectResponseModel project;
 
@@ -30,5 +32,13 @@ public class ReleaseResponseModel extends IdModel {
 
     public void setProject(ProjectResponseModel project) {
         this.project = project;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

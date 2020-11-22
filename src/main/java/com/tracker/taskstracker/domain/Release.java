@@ -1,6 +1,7 @@
 package com.tracker.taskstracker.domain;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -9,7 +10,8 @@ public class Release extends IdEntity {
 
     @Column(nullable = false)
     private String version;
-
+    @Column
+    private Date createdAt;
     @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     private Project project;
@@ -39,5 +41,13 @@ public class Release extends IdEntity {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

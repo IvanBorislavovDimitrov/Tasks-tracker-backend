@@ -3,6 +3,7 @@ package com.tracker.taskstracker.domain;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "projects")
@@ -78,6 +79,13 @@ public class Project extends IdEntity {
 
     public void setReleases(List<Release> releases) {
         this.releases = releases;
+    }
+
+    public List<Task> getCompletedTasks() {
+        return getTasks().stream()
+                .filter(task -> task.getRelease() != null)
+                .filter(task -> task.getState() == Task.State.COMPLETED)
+                .collect(Collectors.toList());
     }
 
     public void addTask(Task task) {

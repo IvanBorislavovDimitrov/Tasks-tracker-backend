@@ -50,8 +50,8 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
     }
 
     @Override
-    public List<TaskResponseModel> findTasksByProjectId(String projectId) {
-        List<Task> tasks = taskRepository.findAllByProjectId(projectId);
+    public List<TaskResponseModel> findNonReleasedTasksByProjectId(String projectId) {
+        List<Task> tasks = taskRepository.findAllByProjectIdAndReleaseIsNull(projectId);
         return tasks.stream()
                 .map(task -> modelMapper.map(task, TaskResponseModel.class))
                 .collect(Collectors.toList());

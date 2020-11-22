@@ -7,7 +7,7 @@ public class ReleaseRequestModel {
     @NotBlank
     private String version;
     @NotBlank
-    private String projectName;
+    private String projectId;
 
     public String getVersion() {
         return version;
@@ -17,11 +17,11 @@ public class ReleaseRequestModel {
         this.version = version;
     }
 
-    public String getProjectName() {
-        return projectName;
+    public String getProjectId() {
+        return projectId;
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 }

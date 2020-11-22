@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface TaskService extends GenericService<TaskRequestModel, TaskResponseModel, String> {
 
-    List<TaskResponseModel> findTasksByProjectId(String projectId);
+    List<TaskResponseModel> findNonReleasedTasksByProjectId(String projectId);
 
     TaskResponseModel findTaskExtendedById(String taskId);
 

@@ -33,9 +33,9 @@ public class TaskController {
         return ResponseEntity.ok(taskResponseModel);
     }
 
-    @GetMapping(value = "/project/{projectId}")
-    public ResponseEntity<List<TaskResponseModel>> getTasksByProjectId(@PathVariable String projectId) {
-        List<TaskResponseModel> taskResponseModels = taskService.findTasksByProjectId(projectId);
+    @GetMapping(value = "/project/unreleased/{projectId}")
+    public ResponseEntity<List<TaskResponseModel>> getNonReleasedTasksByProjectId(@PathVariable String projectId) {
+        List<TaskResponseModel> taskResponseModels = taskService.findNonReleasedTasksByProjectId(projectId);
         return ResponseEntity.ok(taskResponseModels);
     }
 

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReleaseServiceImpl extends GenericServiceImpl<Release, ReleaseRequestModel, ReleaseResponseModel, String> implements ReleaseService {
@@ -44,6 +45,14 @@ public class ReleaseServiceImpl extends GenericServiceImpl<Release, ReleaseReque
         projectRepository.save(project);
         taskRepository.saveAll(completedTasks);
         return modelMapper.map(releaseRepository.save(release), ReleaseResponseModel.class);
+    }
+
+    @Override
+    public List<ReleaseResponseModel> findReleasesByProjectId(String projectId) {
+        List<Release> releases = releaseRepository.findAllByProjectId(projectId);
+        return releases.stream()
+                .map(release -> modelMapper.map(release, ReleaseResponseModel.class))
+                .collect(Collectors.toList());
     }
 
     @Override

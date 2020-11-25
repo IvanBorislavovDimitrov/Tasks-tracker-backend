@@ -83,7 +83,7 @@ public class Project extends IdEntity {
 
     public List<Task> getCompletedTasks() {
         return getTasks().stream()
-                .filter(task -> task.getRelease() != null)
+                .filter(task -> task.getRelease() == null)
                 .filter(task -> task.getState() == Task.State.COMPLETED)
                 .collect(Collectors.toList());
     }

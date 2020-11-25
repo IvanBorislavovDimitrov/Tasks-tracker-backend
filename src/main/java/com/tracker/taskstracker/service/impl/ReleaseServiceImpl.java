@@ -12,7 +12,9 @@ import com.tracker.taskstracker.repository.TaskRepository;
 import com.tracker.taskstracker.service.api.ReleaseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
@@ -42,6 +44,9 @@ public class ReleaseServiceImpl extends GenericServiceImpl<Release, ReleaseReque
         release.setProject(project);
         project.addRelease(release);
         List<Task> completedTasks = project.getCompletedTasks();
+        if (completedTasks.size() == 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nothing to release!");
+        }
         completedTasks.forEach(task -> task.setRelease(release));
         project.setTasks(completedTasks);
         projectRepository.save(project);

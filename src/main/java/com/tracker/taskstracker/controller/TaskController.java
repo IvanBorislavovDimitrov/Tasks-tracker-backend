@@ -79,4 +79,10 @@ public class TaskController {
         return ResponseEntity.ok(tasksResponseModels);
     }
 
+    @GetMapping(value = "/release/{releaseId}")
+    public ResponseEntity<List<TaskResponseModel>> getTasksByReleaseId(@PathVariable String releaseId) {
+        List<TaskResponseModel> taskResponseModels = taskService.findTasksByReleaseId(releaseId);
+        return ResponseEntity.ok(taskResponseModels);
+    }
+
 }

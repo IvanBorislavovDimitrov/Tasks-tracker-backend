@@ -118,6 +118,14 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
     }
 
     @Override
+    public List<TaskResponseModel> findTasksByReleaseId(String releaseId) {
+        List<Task> tasksByReleaseId = taskRepository.findAllByReleaseId(releaseId);
+        return tasksByReleaseId.stream()
+                .map(task -> modelMapper.map(task, TaskResponseModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     protected Class<TaskResponseModel> getOutputModelClass() {
         return TaskResponseModel.class;
     }

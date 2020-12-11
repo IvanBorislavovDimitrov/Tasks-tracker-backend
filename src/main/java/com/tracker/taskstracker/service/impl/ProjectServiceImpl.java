@@ -46,7 +46,7 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
                 map().setPictureName(pictureName);
             }
         });
-        fileService.save(projectRequestModel.getName(), projectRequestModel.getPicture());
+        fileService.save(pictureName, projectRequestModel.getPicture());
         return super.save(projectRequestModel);
     }
 

@@ -27,6 +27,6 @@ public class ResourceController {
     public @ResponseBody
     byte[] getProjectImage(@PathVariable String projectId) {
         String projectPictureName = projectService.findProjectPictureName(projectId);
-        return fileService.findImageByName(projectPictureName);
+        return fileService.findFileByName(projectPictureName);
     }
 }

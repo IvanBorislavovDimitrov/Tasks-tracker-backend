@@ -12,7 +12,7 @@ import java.io.IOException;
 @Service
 public class FileServiceImpl implements FileService {
 
-    private final String FILES_DIRECTORY = System.getProperty("user.home") + File.separator + "files";
+    private final String FILES_DIRECTORY = System.getProperty("user.home") + File.separator + "tasks-tracker-files";
 
     @Override
     public void save(String name, MultipartFile file) {
@@ -25,7 +25,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public byte[] findImageByName(String projectPictureName) {
+    public byte[] findFileByName(String projectPictureName) {
         File file = new File(FILES_DIRECTORY + File.separator + projectPictureName);
         if (!file.exists()) {
             throw new TRException("Image not found");

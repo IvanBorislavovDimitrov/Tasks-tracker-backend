@@ -49,7 +49,8 @@ public class CommentServiceImpl extends GenericServiceImpl<Comment, CommentReque
         ProjectComment projectComment = modelMapper.map(projectCommentRequestModel, ProjectComment.class);
         projectComment.setProject(project);
         updateCreatedAndUpdatedAt(projectComment);
-        User author = userRepository.findByUsername(authorName);
+        User author = userRepository.findByUsername(authorName)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
         projectComment.setAuthor(author);
         ProjectComment savedProjectComment = commentRepository.save(projectComment);
         return modelMapper.map(savedProjectComment, ProjectCommentResponseModel.class);
@@ -67,7 +68,8 @@ public class CommentServiceImpl extends GenericServiceImpl<Comment, CommentReque
         TaskComment taskComment = modelMapper.map(taskCommentRequestModel, TaskComment.class);
         taskComment.setTask(task);
         updateCreatedAndUpdatedAt(taskComment);
-        User author = userRepository.findByUsername(authorName);
+        User author = userRepository.findByUsername(authorName)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
         taskComment.setAuthor(author);
         TaskComment savedTaskComment = commentRepository.save(taskComment);
         return modelMapper.map(savedTaskComment, TaskCommentResponseModel.class);

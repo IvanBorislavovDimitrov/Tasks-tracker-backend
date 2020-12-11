@@ -15,7 +15,9 @@ import com.tracker.taskstracker.repository.UserRepository;
 import com.tracker.taskstracker.service.api.TaskService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
@@ -42,7 +44,8 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
         Task task = modelMapper.map(taskRequestModel, Task.class);
         setDefaultTaskState(task);
         setDefaultDates(task);
-        Project project = projectRepository.findByName(taskRequestModel.getProjectName());
+        Project project = projectRepository.findByName(taskRequestModel.getProjectName())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "project not found"));
         task.setProject(project);
         project.addTask(task);
         taskRepository.save(task);
@@ -77,7 +80,8 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
     public TaskResponseModel assignTaskToUser(String taskId, String username) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new TRException("Task not found"));
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
         task.setAssignee(user);
         return modelMapper.map(taskRepository.save(task), TaskResponseModel.class);
     }

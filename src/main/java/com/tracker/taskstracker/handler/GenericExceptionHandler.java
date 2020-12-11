@@ -15,7 +15,7 @@ public class GenericExceptionHandler {
     @ExceptionHandler({ResponseStatusException.class})
     public ResponseEntity<ApiErrorResponse> handle(ResponseStatusException exception) {
         ApiErrorResponse apiErrorResponse = new ApiErrorResponse(exception.getStatus(), exception.getReason());
-        return ResponseEntity.badRequest()
+        return ResponseEntity.status(exception.getStatus())
                 .body(apiErrorResponse);
     }
 }

@@ -10,11 +10,13 @@ import com.tracker.taskstracker.repository.UserRepository;
 import com.tracker.taskstracker.service.api.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Objects;
 
@@ -46,11 +48,13 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
     }
 
     private void addDefaultRoles(User user) {
-        Role userRole = roleRepository.findByType(Role.Type.USER);
+        Role userRole = roleRepository.findByType(Role.Type.USER)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
         user.addRole(userRole);
         userRole.addUser(user);
         if (userRepository.count() == 0) {
-            Role adminRole = roleRepository.findByType(Role.Type.ADMIN);
+            Role adminRole = roleRepository.findByType(Role.Type.ADMIN)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
             user.addRole(adminRole);
             adminRole.addUser(user);
         }
@@ -58,7 +62,8 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
 
     @Override
     public UserResponseModel findByUsername(String username) {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
         return modelMapper.map(user, UserResponseModel.class);
     }
 
@@ -70,7 +75,8 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
     @Override

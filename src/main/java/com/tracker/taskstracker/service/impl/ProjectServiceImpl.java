@@ -14,8 +14,10 @@ import com.tracker.taskstracker.service.api.ProjectService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,8 +60,10 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
 
     @Override
     public ProjectResponseModel addUserToProject(UserToProjectRequestModel userToProjectRequestModel) {
-        User user = userRepository.findByUsername(userToProjectRequestModel.getUsername());
-        Project project = projectRepository.findByName(userToProjectRequestModel.getProjectName());
+        User user = userRepository.findByUsername(userToProjectRequestModel.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        Project project = projectRepository.findByName(userToProjectRequestModel.getProjectName())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
         user.addProject(project);
         project.addUser(user);
         projectRepository.save(project);

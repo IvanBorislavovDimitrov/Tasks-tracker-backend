@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,9 +67,18 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
         user.addProject(project);
         project.addUser(user);
+        if (isUserAlreadyAdded(user, project.getName())) {
+            return modelMapper.map(project, ProjectResponseModel.class);
+        }
         projectRepository.save(project);
         userRepository.save(user);
         return modelMapper.map(project, ProjectResponseModel.class);
+    }
+
+    private boolean isUserAlreadyAdded(User user, String projectName) {
+        return user.getProjects().stream()
+                .map(Project::getName)
+                .anyMatch(currentProjectName -> Objects.equals(currentProjectName, projectName));
     }
 
     @Override

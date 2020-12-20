@@ -28,6 +28,10 @@ public class User extends IdEntity implements UserDetails {
     private List<Task> tasks = new ArrayList<>();
     @OneToMany(mappedBy = "author", targetEntity = Comment.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+    @Column(name = "account_verification_code")
+    private String accountVerificationCode;
+    @Column(name = "is_active")
+    private boolean isEnabled;
 
     public String getEmail() {
         return email;
@@ -62,7 +66,11 @@ public class User extends IdEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 
     @Override
@@ -111,6 +119,14 @@ public class User extends IdEntity implements UserDetails {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public String getAccountVerificationCode() {
+        return accountVerificationCode;
+    }
+
+    public void setAccountVerificationCode(String accountVerificationCode) {
+        this.accountVerificationCode = accountVerificationCode;
     }
 
     public void addRole(Role role) {

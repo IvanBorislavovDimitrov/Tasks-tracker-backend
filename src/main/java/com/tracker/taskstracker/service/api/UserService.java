@@ -9,4 +9,6 @@ public interface UserService extends UserDetailsService, GenericService<UserRequ
     UserResponseModel register(UserRequestModel userRequestModel);
 
     UserResponseModel findByUsername(String username);
+
+    UserResponseModel activateAccount(String userActivationCode);
 }

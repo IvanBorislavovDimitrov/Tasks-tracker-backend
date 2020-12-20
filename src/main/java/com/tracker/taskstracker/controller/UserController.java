@@ -32,4 +32,10 @@ public class UserController {
         return ResponseEntity.ok(userService.findByUsername(username));
     }
 
+    @PatchMapping("/activate/{activationCode}")
+    public ResponseEntity<UserResponseModel> activateAccount(@PathVariable String activationCode) {
+        UserResponseModel userResponseModel = userService.activateAccount(activationCode);
+        return ResponseEntity.ok(userResponseModel);
+    }
+
 }

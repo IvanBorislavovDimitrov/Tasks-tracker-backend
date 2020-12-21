@@ -1,5 +1,6 @@
 package com.tracker.taskstracker.service.impl;
 
+import com.tracker.taskstracker.constants.Constants;
 import com.tracker.taskstracker.domain.Role;
 import com.tracker.taskstracker.domain.User;
 import com.tracker.taskstracker.exception.TRException;
@@ -7,7 +8,9 @@ import com.tracker.taskstracker.model.request.UserRequestModel;
 import com.tracker.taskstracker.model.response.UserResponseModel;
 import com.tracker.taskstracker.repository.RoleRepository;
 import com.tracker.taskstracker.repository.UserRepository;
+import com.tracker.taskstracker.service.api.FileService;
 import com.tracker.taskstracker.service.api.UserService;
+import com.tracker.taskstracker.util.FilesUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Objects;
@@ -33,16 +37,19 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
     private final RoleRepository roleRepository;
     private final JavaMailSender javaMailSender;
     private final ExecutorService executorService;
+    private final FileService fileService;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder,
-                           RoleRepository roleRepository, JavaMailSender javaMailSender, ExecutorService executorService) {
+                           RoleRepository roleRepository, JavaMailSender javaMailSender, ExecutorService executorService,
+                           FileService fileService) {
         super(userRepository, modelMapper);
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.javaMailSender = javaMailSender;
         this.executorService = executorService;
+        this.fileService = fileService;
     }
 
     @Override
@@ -105,6 +112,17 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to perform this request"));
         user.setEnabled(true);
         return modelMapper.map(userRepository.save(user), UserResponseModel.class);
+    }
+
+    @Override
+    public UserResponseModel updateProfilePicture(String username, MultipartFile profilePicture) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        user.setProfilePictureName(user.getUsername() + Constants.USERNAME_PROFILE_PICTURE_SUFFIX +
+                FilesUtil.getFileExtension(profilePicture));
+        userRepository.save(user);
+        fileService.save(user.getProfilePictureName(), profilePicture);
+        return modelMapper.map(user, UserResponseModel.class);
     }
 
     @Override

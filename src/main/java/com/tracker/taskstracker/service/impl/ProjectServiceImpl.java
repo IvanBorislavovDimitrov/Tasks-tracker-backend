@@ -11,12 +11,12 @@ import com.tracker.taskstracker.repository.ProjectRepository;
 import com.tracker.taskstracker.repository.UserRepository;
 import com.tracker.taskstracker.service.api.FileService;
 import com.tracker.taskstracker.service.api.ProjectService;
+import com.tracker.taskstracker.util.FilesUtil;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
 
     @Override
     public ProjectResponseModel save(ProjectRequestModel projectRequestModel) {
-        String pictureName = projectRequestModel.getName() + getFileExtension(projectRequestModel.getPicture());
+        String pictureName = projectRequestModel.getName() + FilesUtil.getFileExtension(projectRequestModel.getPicture());
         modelMapper.addMappings(new PropertyMap<ProjectRequestModel, Project>() {
             @Override
             protected void configure() {
@@ -51,12 +51,6 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
         });
         fileService.save(pictureName, projectRequestModel.getPicture());
         return super.save(projectRequestModel);
-    }
-
-    private String getFileExtension(MultipartFile file) {
-        return file.getOriginalFilename()
-                .substring(file.getOriginalFilename()
-                        .lastIndexOf("."));
     }
 
     @Override

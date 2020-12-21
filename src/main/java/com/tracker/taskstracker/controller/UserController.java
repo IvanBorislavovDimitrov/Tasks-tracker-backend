@@ -3,10 +3,12 @@ package com.tracker.taskstracker.controller;
 import com.tracker.taskstracker.model.request.UserRequestModel;
 import com.tracker.taskstracker.model.response.UserResponseModel;
 import com.tracker.taskstracker.service.api.UserService;
+import com.tracker.taskstracker.util.LoggedUserGetter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -15,10 +17,12 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
+    private final LoggedUserGetter loggedUserGetter;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, LoggedUserGetter loggedUserGetter) {
         this.userService = userService;
+        this.loggedUserGetter = loggedUserGetter;
     }
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -32,9 +36,22 @@ public class UserController {
         return ResponseEntity.ok(userService.findByUsername(username));
     }
 
+    @GetMapping("/logged-user")
+    public ResponseEntity<UserResponseModel> getLoggedUser() {
+        String loggedUserUsername = loggedUserGetter.getUsername();
+        return ResponseEntity.ok(userService.findByUsername(loggedUserUsername));
+    }
+
     @PatchMapping("/activate/{activationCode}")
     public ResponseEntity<UserResponseModel> activateAccount(@PathVariable String activationCode) {
         UserResponseModel userResponseModel = userService.activateAccount(activationCode);
+        return ResponseEntity.ok(userResponseModel);
+    }
+
+    @PatchMapping("/update/profile-picture")
+    public ResponseEntity<UserResponseModel> updateProfilePicture(MultipartFile profilePicture) {
+        String loggedUserUsername = loggedUserGetter.getUsername();
+        UserResponseModel userResponseModel = userService.updateProfilePicture(loggedUserUsername, profilePicture);
         return ResponseEntity.ok(userResponseModel);
     }
 

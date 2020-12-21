@@ -32,6 +32,8 @@ public class User extends IdEntity implements UserDetails {
     private String accountVerificationCode;
     @Column(name = "is_active")
     private boolean isEnabled;
+    @Column(name = "profile_picture_name")
+    private String profilePictureName;
 
     public String getEmail() {
         return email;
@@ -127,6 +129,14 @@ public class User extends IdEntity implements UserDetails {
 
     public void setAccountVerificationCode(String accountVerificationCode) {
         this.accountVerificationCode = accountVerificationCode;
+    }
+
+    public String getProfilePictureName() {
+        return profilePictureName;
+    }
+
+    public void setProfilePictureName(String profilePictureName) {
+        this.profilePictureName = profilePictureName;
     }
 
     public void addRole(Role role) {

@@ -6,6 +6,7 @@ public class UserResponseModel extends IdModel {
 
     private String email;
     private String username;
+    private String profilePictureName;
     private List<String> roles;
 
     public String getEmail() {
@@ -30,5 +31,13 @@ public class UserResponseModel extends IdModel {
 
     public void setRoles(List<String> roles) {
         this.roles = roles;
+    }
+
+    public String getProfilePictureName() {
+        return profilePictureName;
+    }
+
+    public void setProfilePictureName(String profilePictureName) {
+        this.profilePictureName = profilePictureName;
     }
 }

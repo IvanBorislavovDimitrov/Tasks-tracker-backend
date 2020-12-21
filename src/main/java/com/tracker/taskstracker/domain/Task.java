@@ -1,7 +1,6 @@
 package com.tracker.taskstracker.domain;
 
 import com.tracker.taskstracker.exception.TRException;
-import org.springframework.jca.cci.object.MappingRecordOperation;
 
 import javax.persistence.*;
 import java.text.MessageFormat;

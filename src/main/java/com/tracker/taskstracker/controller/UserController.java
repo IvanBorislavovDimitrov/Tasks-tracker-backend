@@ -1,5 +1,6 @@
 package com.tracker.taskstracker.controller;
 
+import com.tracker.taskstracker.model.request.UpdateUserPasswordRequestModel;
 import com.tracker.taskstracker.model.request.UserRequestModel;
 import com.tracker.taskstracker.model.response.UserResponseModel;
 import com.tracker.taskstracker.service.api.UserService;
@@ -53,6 +54,13 @@ public class UserController {
         String loggedUserUsername = loggedUserGetter.getUsername();
         UserResponseModel userResponseModel = userService.updateProfilePicture(loggedUserUsername, profilePicture);
         return ResponseEntity.ok(userResponseModel);
+    }
+
+    @PatchMapping(value = "/update/password")
+    public ResponseEntity<UserResponseModel> updatePassword(@RequestBody @Valid UpdateUserPasswordRequestModel
+                                                                        updateUserPasswordRequestModel) {
+        String loggedUserUsername = loggedUserGetter.getUsername();
+        return ResponseEntity.ok(userService.updateUserPassword(loggedUserUsername, updateUserPasswordRequestModel));
     }
 
 }

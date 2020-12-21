@@ -4,6 +4,7 @@ import com.tracker.taskstracker.constants.Constants;
 import com.tracker.taskstracker.domain.Role;
 import com.tracker.taskstracker.domain.User;
 import com.tracker.taskstracker.exception.TRException;
+import com.tracker.taskstracker.model.request.UpdateUserPasswordRequestModel;
 import com.tracker.taskstracker.model.request.UserRequestModel;
 import com.tracker.taskstracker.model.response.UserResponseModel;
 import com.tracker.taskstracker.model.response.UserResponseModelExtended;
@@ -145,6 +146,18 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
         return modelMapper.map(user, UserResponseModelExtended.class);
+    }
+
+    @Override
+    public UserResponseModel updateUserPassword(String username, UpdateUserPasswordRequestModel updateUserPasswordRequestModel) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        if (!passwordEncoder.matches(updateUserPasswordRequestModel.getCurrentPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Current password is invalid!");
+        }
+        validatePasswords(updateUserPasswordRequestModel.getNewPassword(), updateUserPasswordRequestModel.getConfirmNewPassword());
+        user.setPassword(passwordEncoder.encode(updateUserPasswordRequestModel.getNewPassword()));
+        return modelMapper.map(user, UserResponseModel.class);
     }
 
     @Override

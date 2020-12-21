@@ -131,6 +131,15 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
     }
 
     @Override
+    public List<TaskResponseModel> findTasksWhichContainInNameForUser(String name, String username) {
+        List<Task> tasksByNameContaining = taskRepository
+                .findAllByNameContainingIgnoreCaseAndProjectUsersUsernameEquals(name, username);
+        return tasksByNameContaining.stream()
+                .map(task -> modelMapper.map(task, TaskResponseModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     protected Class<TaskResponseModel> getOutputModelClass() {
         return TaskResponseModel.class;
     }

@@ -85,4 +85,10 @@ public class TaskController {
         return ResponseEntity.ok(taskResponseModels);
     }
 
+    @GetMapping(value = "/search")
+    public ResponseEntity<List<TaskResponseModel>> getTaskByNameContaining(@RequestParam String name) {
+        String loggedUserUsername = loggedUserGetter.getUsername();
+        return ResponseEntity.ok(taskService.findTasksWhichContainInNameForUser(name, loggedUserUsername));
+    }
+
 }

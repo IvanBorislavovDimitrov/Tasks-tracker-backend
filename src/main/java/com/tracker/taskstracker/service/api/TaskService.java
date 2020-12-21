@@ -24,4 +24,6 @@ public interface TaskService extends GenericService<TaskRequestModel, TaskRespon
     List<TaskResponseModel> getTaskByUsername(String username);
 
     List<TaskResponseModel> findTasksByReleaseId(String releaseId);
+
+    List<TaskResponseModel> findTasksWhichContainInNameForUser(String name, String username);
 }

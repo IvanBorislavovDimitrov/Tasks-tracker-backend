@@ -1,16 +1,13 @@
 package com.tracker.taskstracker.model.request;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 public class UserRequestModel {
 
-    @Column(unique = true)
     @Pattern(regexp = "^[A-Za-z][A-Za-z.0-9]+@([A-Za-z]+(\\.)){1,}[A-Za-z0-9]+$")
     private String email;
     @NotBlank
-    @Column(unique = true)
     private String username;
     @NotBlank
     private String password;

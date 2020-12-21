@@ -1,5 +1,7 @@
 package com.tracker.taskstracker.controller;
 
+import com.tracker.taskstracker.model.request.ChangeForgottenPasswordRequestModel;
+import com.tracker.taskstracker.model.request.ForgottenPasswordRequestModel;
 import com.tracker.taskstracker.model.request.UpdateUserPasswordRequestModel;
 import com.tracker.taskstracker.model.request.UserRequestModel;
 import com.tracker.taskstracker.model.response.UserResponseModel;
@@ -58,9 +60,25 @@ public class UserController {
 
     @PatchMapping(value = "/update/password")
     public ResponseEntity<UserResponseModel> updatePassword(@RequestBody @Valid UpdateUserPasswordRequestModel
-                                                                        updateUserPasswordRequestModel) {
+                                                                    updateUserPasswordRequestModel) {
         String loggedUserUsername = loggedUserGetter.getUsername();
         return ResponseEntity.ok(userService.updateUserPassword(loggedUserUsername, updateUserPasswordRequestModel));
     }
 
+    @PostMapping(value = "/generate/forgotten-password")
+    public ResponseEntity<UserResponseModel> generateForgottenPasswordEmail(@RequestBody @Valid ForgottenPasswordRequestModel
+                                                                                    forgottenPasswordRequestModel) {
+        return ResponseEntity.ok(userService.generateForgottenPasswordEmail(forgottenPasswordRequestModel.getEmail()));
+    }
+
+    @GetMapping(value = "/find/{forgottenPasswordToken}")
+    public ResponseEntity<UserResponseModel> getByForgottenPasswordToken(@PathVariable String forgottenPasswordToken) {
+        return ResponseEntity.ok(userService.findByForgottenPasswordToken(forgottenPasswordToken));
+    }
+
+    @PatchMapping("/update/forgotten-password")
+    public ResponseEntity<UserResponseModel> changeForgottenPassword(@RequestBody @Valid ChangeForgottenPasswordRequestModel
+                                                                             changeForgottenPasswordRequestModel) {
+        return ResponseEntity.ok(userService.changeForgottenPassword(changeForgottenPasswordRequestModel));
+    }
 }

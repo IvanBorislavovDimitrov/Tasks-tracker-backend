@@ -35,6 +35,8 @@ public class User extends IdEntity implements UserDetails {
     @ElementCollection
     @CollectionTable(name = "login_records", joinColumns = @JoinColumn(name = "id"))
     private List<LoginRecord> loginRecords = new LinkedList<>();
+    @Column(name = "forgotten_password_token")
+    private String forgottenPasswordToken;
 
     public String getEmail() {
         return email;
@@ -146,6 +148,14 @@ public class User extends IdEntity implements UserDetails {
 
     public void setLoginRecords(List<LoginRecord> loginRecords) {
         this.loginRecords = loginRecords;
+    }
+
+    public String getForgottenPasswordToken() {
+        return forgottenPasswordToken;
+    }
+
+    public void setForgottenPasswordToken(String forgottenPasswordToken) {
+        this.forgottenPasswordToken = forgottenPasswordToken;
     }
 
     public void addRole(Role role) {

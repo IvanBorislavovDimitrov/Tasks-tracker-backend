@@ -1,5 +1,6 @@
 package com.tracker.taskstracker.service.api;
 
+import com.tracker.taskstracker.model.request.ChangeForgottenPasswordRequestModel;
 import com.tracker.taskstracker.model.request.UpdateUserPasswordRequestModel;
 import com.tracker.taskstracker.model.request.UserRequestModel;
 import com.tracker.taskstracker.model.response.UserResponseModel;
@@ -21,4 +22,10 @@ public interface UserService extends UserDetailsService, GenericService<UserRequ
     UserResponseModel findExtendedByUsername(String username);
 
     UserResponseModel updateUserPassword(String username, UpdateUserPasswordRequestModel updateUserPasswordRequestModel);
+
+    UserResponseModel generateForgottenPasswordEmail(String email);
+
+    UserResponseModel findByForgottenPasswordToken(String forgottenPasswordToken);
+
+    UserResponseModel changeForgottenPassword(ChangeForgottenPasswordRequestModel changeForgottenPasswordRequestModel);
 }

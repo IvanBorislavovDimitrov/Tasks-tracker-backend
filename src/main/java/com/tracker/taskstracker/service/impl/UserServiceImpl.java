@@ -4,6 +4,7 @@ import com.tracker.taskstracker.constants.Constants;
 import com.tracker.taskstracker.domain.Role;
 import com.tracker.taskstracker.domain.User;
 import com.tracker.taskstracker.exception.TRException;
+import com.tracker.taskstracker.model.request.ChangeForgottenPasswordRequestModel;
 import com.tracker.taskstracker.model.request.UpdateUserPasswordRequestModel;
 import com.tracker.taskstracker.model.request.UserRequestModel;
 import com.tracker.taskstracker.model.response.UserResponseModel;
@@ -158,6 +159,42 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
         validatePasswords(updateUserPasswordRequestModel.getNewPassword(), updateUserPasswordRequestModel.getConfirmNewPassword());
         user.setPassword(passwordEncoder.encode(updateUserPasswordRequestModel.getNewPassword()));
         return modelMapper.map(user, UserResponseModel.class);
+    }
+
+    @Override
+    public UserResponseModel generateForgottenPasswordEmail(String email) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom("automaticmailsendercommunity@gmail.com");
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        simpleMailMessage.setTo(user.getEmail());
+        simpleMailMessage.setSubject("Reset your password!");
+        UUID forgottenPasswordToken = UUID.randomUUID();
+        user.setForgottenPasswordToken(forgottenPasswordToken.toString());
+        simpleMailMessage.setText("Click here: " + "http://localhost:3000/users/reset-password/" + forgottenPasswordToken);
+        executorService.execute(() -> javaMailSender.send(simpleMailMessage));
+        return modelMapper.map(userRepository.save(user), UserResponseModel.class);
+    }
+
+    @Override
+    public UserResponseModel findByForgottenPasswordToken(String forgottenPasswordToken) {
+        User user = userRepository.findByForgottenPasswordToken(forgottenPasswordToken)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User by token found"));
+        return modelMapper.map(user, UserResponseModel.class);
+    }
+
+    @Override
+    public UserResponseModel changeForgottenPassword(ChangeForgottenPasswordRequestModel changeForgottenPasswordRequestModel) {
+        User user = userRepository.findByUsername(changeForgottenPasswordRequestModel.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        if (!Objects.equals(user.getForgottenPasswordToken(), changeForgottenPasswordRequestModel.getToken())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tokens do no match");
+        }
+        validatePasswords(changeForgottenPasswordRequestModel.getNewPassword(),
+                changeForgottenPasswordRequestModel.getConfirmNewPassword());
+        user.setPassword(passwordEncoder.encode(changeForgottenPasswordRequestModel.getNewPassword()));
+        user.setForgottenPasswordToken(null);
+        return modelMapper.map(userRepository.save(user), UserResponseModel.class);
     }
 
     @Override

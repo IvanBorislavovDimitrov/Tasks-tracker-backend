@@ -48,7 +48,7 @@ public class UserController {
         return ResponseEntity.ok(userResponseModel);
     }
 
-    @PatchMapping("/update/profile-picture")
+    @PatchMapping(value = "/update/profile-picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<UserResponseModel> updateProfilePicture(MultipartFile profilePicture) {
         String loggedUserUsername = loggedUserGetter.getUsername();
         UserResponseModel userResponseModel = userService.updateProfilePicture(loggedUserUsername, profilePicture);

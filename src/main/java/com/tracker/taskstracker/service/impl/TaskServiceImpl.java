@@ -42,6 +42,7 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
     @Override
     public TaskResponseModel save(TaskRequestModel taskRequestModel) {
         Task task = modelMapper.map(taskRequestModel, Task.class);
+        task.setType(Task.Type.fromString(taskRequestModel.getType()));
         setDefaultTaskState(task);
         setDefaultDates(task);
         Project project = projectRepository.findByName(taskRequestModel.getProjectName())

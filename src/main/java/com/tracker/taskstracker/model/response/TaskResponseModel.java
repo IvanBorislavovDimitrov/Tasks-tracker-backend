@@ -6,6 +6,7 @@ public class TaskResponseModel extends IdModel {
 
     private String name;
     private String state;
+    private String type;
     private Date createdAt;
     private Date updatedAt;
     private String description;
@@ -66,5 +67,13 @@ public class TaskResponseModel extends IdModel {
 
     public void setAssignee(UserResponseModel assignee) {
         this.assignee = assignee;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

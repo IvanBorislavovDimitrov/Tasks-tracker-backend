@@ -1,6 +1,7 @@
 package com.tracker.taskstracker.domain;
 
 import com.tracker.taskstracker.exception.TRException;
+import org.springframework.jca.cci.object.MappingRecordOperation;
 
 import javax.persistence.*;
 import java.text.MessageFormat;
@@ -20,6 +21,8 @@ public class Task extends IdEntity {
     private String name;
     @Column(nullable = false)
     private State state;
+    @Column
+    private Type type;
     @Column(name = "created_at")
     private Date createdAt;
     @Column(name = "updated_at")
@@ -110,6 +113,14 @@ public class Task extends IdEntity {
         this.release = release;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     public void addComment(TaskComment taskComment) {
         taskComments.add(taskComment);
     }
@@ -118,7 +129,7 @@ public class Task extends IdEntity {
 
         BACKLOG, SELECTED, IN_PROGRESS, BLOCKED, COMPLETED, RELEASED;
 
-        private final static Map<String, State> NAMES_TO_VALUES = Stream.of(values())
+        private static final Map<String, State> NAMES_TO_VALUES = Stream.of(values())
                 .collect(Collectors.toMap(value -> value.toString()
                                 .toLowerCase(),
                         Function.identity()));
@@ -129,6 +140,28 @@ public class Task extends IdEntity {
                 throw new TRException(MessageFormat.format("Task state not found: \"{0}\"", name));
             }
             return state;
+        }
+    }
+
+    public enum Type {
+
+        BACKLOG_ITEM("backlog-item"), BUG("bug");
+
+        private final String referenceName;
+
+        Type(String referenceName) {
+            this.referenceName = referenceName;
+        }
+
+        private static final Map<String, Type> NAMES_TO_VALUE = Stream.of(values())
+                .collect(Collectors.toMap(value -> value.referenceName, Function.identity()));
+
+        public static Type fromString(String name) {
+            Type type = NAMES_TO_VALUE.get(name);
+            if (type == null) {
+                throw new TRException(MessageFormat.format("Task type not found: \"{0}\"", name));
+            }
+            return type;
         }
     }
 

@@ -8,6 +8,8 @@ public class TaskRequestModel {
     @NotBlank
     private String name;
     private String state;
+    @NotBlank
+    private String type;
     @NotNull
     private String description;
     @NotBlank
@@ -43,5 +45,13 @@ public class TaskRequestModel {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

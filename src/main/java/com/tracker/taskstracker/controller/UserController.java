@@ -39,7 +39,7 @@ public class UserController {
     @GetMapping("/logged-user")
     public ResponseEntity<UserResponseModel> getLoggedUser() {
         String loggedUserUsername = loggedUserGetter.getUsername();
-        return ResponseEntity.ok(userService.findByUsername(loggedUserUsername));
+        return ResponseEntity.ok(userService.findExtendedByUsername(loggedUserUsername));
     }
 
     @PatchMapping("/activate/{activationCode}")

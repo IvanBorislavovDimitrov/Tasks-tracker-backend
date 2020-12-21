@@ -6,6 +6,7 @@ import com.tracker.taskstracker.domain.User;
 import com.tracker.taskstracker.exception.TRException;
 import com.tracker.taskstracker.model.request.UserRequestModel;
 import com.tracker.taskstracker.model.response.UserResponseModel;
+import com.tracker.taskstracker.model.response.UserResponseModelExtended;
 import com.tracker.taskstracker.repository.RoleRepository;
 import com.tracker.taskstracker.repository.UserRepository;
 import com.tracker.taskstracker.service.api.FileService;
@@ -137,6 +138,13 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
             user.removeOldestLoginRecord();
         }
         userRepository.save(user);
+    }
+
+    @Override
+    public UserResponseModel findExtendedByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        return modelMapper.map(user, UserResponseModelExtended.class);
     }
 
     @Override

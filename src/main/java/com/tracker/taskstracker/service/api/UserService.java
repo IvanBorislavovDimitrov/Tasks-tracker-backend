@@ -16,4 +16,6 @@ public interface UserService extends UserDetailsService, GenericService<UserRequ
     UserResponseModel updateProfilePicture(String username, MultipartFile profilePicture);
 
     void saveUserLoginRecord(String username);
+
+    UserResponseModel findExtendedByUsername(String username);
 }

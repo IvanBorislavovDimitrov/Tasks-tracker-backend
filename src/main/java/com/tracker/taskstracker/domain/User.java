@@ -5,9 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -34,6 +32,9 @@ public class User extends IdEntity implements UserDetails {
     private boolean isEnabled;
     @Column(name = "profile_picture_name")
     private String profilePictureName;
+    @ElementCollection
+    @CollectionTable(name = "login_records", joinColumns = @JoinColumn(name = "id"))
+    private List<LoginRecord> loginRecords = new LinkedList<>();
 
     public String getEmail() {
         return email;
@@ -139,11 +140,45 @@ public class User extends IdEntity implements UserDetails {
         this.profilePictureName = profilePictureName;
     }
 
+    public List<LoginRecord> getLoginRecords() {
+        return loginRecords;
+    }
+
+    public void setLoginRecords(List<LoginRecord> loginRecords) {
+        this.loginRecords = loginRecords;
+    }
+
     public void addRole(Role role) {
         roles.add(role);
     }
 
     public void addProject(Project project) {
         projects.add(project);
+    }
+
+    public void addLoginRecord(LoginRecord loginRecord) {
+        loginRecords.add(loginRecord);
+    }
+
+    public LoginRecord removeOldestLoginRecord() {
+        if (loginRecords.size() == 0) {
+            throw new IllegalStateException("There are no login records!");
+        }
+        return loginRecords.remove(0);
+    }
+
+    @Embeddable
+    public static class LoginRecord {
+
+        @Column(name = "created_at", nullable = false)
+        private Date createdAt;
+
+        public Date getCreatedAt() {
+            return createdAt;
+        }
+
+        public void setCreatedAt(Date createdAt) {
+            this.createdAt = createdAt;
+        }
     }
 }

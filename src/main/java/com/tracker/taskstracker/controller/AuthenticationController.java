@@ -38,6 +38,7 @@ public class AuthenticationController {
                 authenticationRequestModel.getPassword());
         authenticate(token);
         UserResponseModel userResponseModel = userService.findByUsername(authenticationRequestModel.getUsername());
+        userService.saveUserLoginRecord(userResponseModel.getUsername());
         return ResponseEntity.ok(new AuthenticationResponseModel(JwtUtil.generateToken(userResponseModel)));
     }
 

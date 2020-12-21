@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -123,6 +124,19 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
         userRepository.save(user);
         fileService.save(user.getProfilePictureName(), profilePicture);
         return modelMapper.map(user, UserResponseModel.class);
+    }
+
+    @Override
+    public void saveUserLoginRecord(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        User.LoginRecord loginRecord = new User.LoginRecord();
+        loginRecord.setCreatedAt(new Date());
+        user.addLoginRecord(loginRecord);
+        if (user.getLoginRecords().size() > 10) {
+            user.removeOldestLoginRecord();
+        }
+        userRepository.save(user);
     }
 
     @Override

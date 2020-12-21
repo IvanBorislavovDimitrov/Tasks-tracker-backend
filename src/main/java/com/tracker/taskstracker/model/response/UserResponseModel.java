@@ -1,5 +1,6 @@
 package com.tracker.taskstracker.model.response;
 
+import java.util.Date;
 import java.util.List;
 
 public class UserResponseModel extends IdModel {
@@ -8,6 +9,7 @@ public class UserResponseModel extends IdModel {
     private String username;
     private String profilePictureName;
     private List<String> roles;
+    private List<LoginRecord> loginRecords;
 
     public String getEmail() {
         return email;
@@ -39,5 +41,26 @@ public class UserResponseModel extends IdModel {
 
     public void setProfilePictureName(String profilePictureName) {
         this.profilePictureName = profilePictureName;
+    }
+
+    public List<LoginRecord> getLoginRecords() {
+        return loginRecords;
+    }
+
+    public void setLoginRecords(List<LoginRecord> loginRecords) {
+        this.loginRecords = loginRecords;
+    }
+
+    public static class LoginRecord {
+
+        private Date createdAt;
+
+        public Date getCreatedAt() {
+            return createdAt;
+        }
+
+        public void setCreatedAt(Date createdAt) {
+            this.createdAt = createdAt;
+        }
     }
 }

@@ -135,6 +135,7 @@ public class TaskServiceImpl extends GenericServiceImpl<Task, TaskRequestModel, 
         List<Task> tasksByNameContaining = taskRepository
                 .findAllByNameContainingIgnoreCaseAndProjectUsersUsernameEquals(name, username);
         return tasksByNameContaining.stream()
+                .distinct()
                 .map(task -> modelMapper.map(task, TaskResponseModel.class))
                 .collect(Collectors.toList());
     }

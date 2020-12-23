@@ -50,8 +50,14 @@ public class ProjectController {
     }
 
     @GetMapping(value = "/{projectId}")
-    public ResponseEntity<? extends ProjectResponseModel> getProjectById(@PathVariable String projectId) {
+    public ResponseEntity<ProjectResponseModel> getProjectById(@PathVariable String projectId) {
         ProjectResponseModel projectResponseModel = projectService.findProjectById(projectId);
+        return ResponseEntity.ok(projectResponseModel);
+    }
+
+    @DeleteMapping("/{projectId}")
+    public ResponseEntity<ProjectResponseModel> deleteProjectById(@PathVariable String projectId) {
+        ProjectResponseModel projectResponseModel = projectService.deleteById(projectId);
         return ResponseEntity.ok(projectResponseModel);
     }
 }

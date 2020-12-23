@@ -99,6 +99,13 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
     }
 
     @Override
+    public ProjectResponseModel deleteById(String projectId) {
+        ProjectResponseModel projectResponseModel = super.deleteById(projectId);
+        fileService.deleteByName(projectResponseModel.getPictureName());
+        return projectResponseModel;
+    }
+
+    @Override
     protected Class<ProjectResponseModel> getOutputModelClass() {
         return ProjectResponseModel.class;
     }

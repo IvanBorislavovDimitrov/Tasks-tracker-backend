@@ -22,8 +22,8 @@ public class LocalFileServiceImpl implements FileService {
     }
 
     @Override
-    public byte[] findFileByName(String projectPictureName) {
-        File file = new File(FILES_DIRECTORY + File.separator + projectPictureName);
+    public byte[] findFileByName(String name) {
+        File file = new File(FILES_DIRECTORY + File.separator + name);
         if (!file.exists()) {
             throw new TRException("Image not found");
         }
@@ -32,6 +32,12 @@ public class LocalFileServiceImpl implements FileService {
         } catch (IOException e) {
             throw new TRException("Image not loaded");
         }
+    }
+
+    @Override
+    public void deleteByName(String name) {
+        File file = new File(FILES_DIRECTORY + File.separator + name);
+        FileUtils.deleteQuietly(file);
     }
 
     private byte[] getBytes(MultipartFile file) {

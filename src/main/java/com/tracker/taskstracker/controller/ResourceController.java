@@ -1,9 +1,10 @@
 package com.tracker.taskstracker.controller;
 
 import com.tracker.taskstracker.model.response.UserResponseModel;
-import com.tracker.taskstracker.service.api.FileService;
+import com.tracker.taskstracker.storage.FileService;
 import com.tracker.taskstracker.service.api.ProjectService;
 import com.tracker.taskstracker.service.api.UserService;
+import com.tracker.taskstracker.storage.FileStorageGetter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -21,9 +22,9 @@ public class ResourceController {
     private final UserService userService;
 
     @Autowired
-    public ResourceController(ProjectService projectService, FileService fileService, UserService userService) {
+    public ResourceController(ProjectService projectService, FileStorageGetter fileStorageGetter, UserService userService) {
         this.projectService = projectService;
-        this.fileService = fileService;
+        this.fileService = fileStorageGetter.getFileService();
         this.userService = userService;
     }
 

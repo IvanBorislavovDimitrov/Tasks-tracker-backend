@@ -1,4 +1,4 @@
-package com.tracker.taskstracker.service.api;
+package com.tracker.taskstracker.storage;
 
 import org.springframework.web.multipart.MultipartFile;
 

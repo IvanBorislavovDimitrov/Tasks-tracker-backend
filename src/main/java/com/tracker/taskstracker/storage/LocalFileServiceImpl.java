@@ -1,16 +1,13 @@
-package com.tracker.taskstracker.service.impl;
+package com.tracker.taskstracker.storage;
 
 import com.tracker.taskstracker.exception.TRException;
-import com.tracker.taskstracker.service.api.FileService;
 import org.apache.commons.io.FileUtils;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 
-@Service
-public class FileServiceImpl implements FileService {
+public class LocalFileServiceImpl implements FileService {
 
     private final String FILES_DIRECTORY = System.getProperty("user.home") + File.separator + "tasks-tracker-files";
 

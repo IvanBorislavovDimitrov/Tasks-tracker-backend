@@ -9,8 +9,9 @@ import com.tracker.taskstracker.model.response.ProjectResponseModel;
 import com.tracker.taskstracker.model.response.ProjectResponseModelExtended;
 import com.tracker.taskstracker.repository.ProjectRepository;
 import com.tracker.taskstracker.repository.UserRepository;
-import com.tracker.taskstracker.service.api.FileService;
 import com.tracker.taskstracker.service.api.ProjectService;
+import com.tracker.taskstracker.storage.FileService;
+import com.tracker.taskstracker.storage.FileStorageGetter;
 import com.tracker.taskstracker.util.FilesUtil;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
@@ -33,11 +34,11 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
 
     @Autowired
     public ProjectServiceImpl(ProjectRepository projectRepository, ModelMapper modelMapper, UserRepository userRepository,
-                              FileService fileService) {
+                              FileStorageGetter fileStorageGetter) {
         super(projectRepository, modelMapper);
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
-        this.fileService = fileService;
+        this.fileService = fileStorageGetter.getFileService();
     }
 
     @Override

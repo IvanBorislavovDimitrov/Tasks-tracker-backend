@@ -13,8 +13,9 @@ import com.tracker.taskstracker.model.response.UserResponseModelExtended;
 import com.tracker.taskstracker.repository.ProjectRepository;
 import com.tracker.taskstracker.repository.RoleRepository;
 import com.tracker.taskstracker.repository.UserRepository;
-import com.tracker.taskstracker.service.api.FileService;
 import com.tracker.taskstracker.service.api.UserService;
+import com.tracker.taskstracker.storage.FileService;
+import com.tracker.taskstracker.storage.FileStorageGetter;
 import com.tracker.taskstracker.util.FilesUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,14 +52,14 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder,
                            RoleRepository roleRepository, JavaMailSender javaMailSender, ExecutorService executorService,
-                           FileService fileService, ProjectRepository projectRepository) {
+                           FileStorageGetter fileStorageGetter, ProjectRepository projectRepository) {
         super(userRepository, modelMapper);
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.javaMailSender = javaMailSender;
         this.executorService = executorService;
-        this.fileService = fileService;
+        this.fileService = fileStorageGetter.getFileService();
         this.projectRepository = projectRepository;
     }
 

@@ -59,11 +59,11 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
         Project project = projectRepository.findByName(userToProjectRequestModel.getProjectName())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
-        user.addProject(project);
-        project.addUser(user);
         if (isUserAlreadyAdded(user, project.getName())) {
             return modelMapper.map(project, ProjectResponseModel.class);
         }
+        user.addProject(project);
+        project.addUser(user);
         projectRepository.save(project);
         userRepository.save(user);
         return modelMapper.map(project, ProjectResponseModel.class);

@@ -1,6 +1,7 @@
 package com.tracker.taskstracker.service.impl;
 
 import com.tracker.taskstracker.constants.Constants;
+import com.tracker.taskstracker.domain.Project;
 import com.tracker.taskstracker.domain.Role;
 import com.tracker.taskstracker.domain.User;
 import com.tracker.taskstracker.exception.TRException;
@@ -9,6 +10,7 @@ import com.tracker.taskstracker.model.request.UpdateUserPasswordRequestModel;
 import com.tracker.taskstracker.model.request.UserRequestModel;
 import com.tracker.taskstracker.model.response.UserResponseModel;
 import com.tracker.taskstracker.model.response.UserResponseModelExtended;
+import com.tracker.taskstracker.repository.ProjectRepository;
 import com.tracker.taskstracker.repository.RoleRepository;
 import com.tracker.taskstracker.repository.UserRepository;
 import com.tracker.taskstracker.service.api.FileService;
@@ -28,9 +30,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -42,11 +46,12 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
     private final JavaMailSender javaMailSender;
     private final ExecutorService executorService;
     private final FileService fileService;
+    private final ProjectRepository projectRepository;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder,
                            RoleRepository roleRepository, JavaMailSender javaMailSender, ExecutorService executorService,
-                           FileService fileService) {
+                           FileService fileService, ProjectRepository projectRepository) {
         super(userRepository, modelMapper);
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -54,6 +59,7 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
         this.javaMailSender = javaMailSender;
         this.executorService = executorService;
         this.fileService = fileService;
+        this.projectRepository = projectRepository;
     }
 
     @Override
@@ -195,6 +201,17 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
         user.setPassword(passwordEncoder.encode(changeForgottenPasswordRequestModel.getNewPassword()));
         user.setForgottenPasswordToken(null);
         return modelMapper.map(userRepository.save(user), UserResponseModel.class);
+    }
+
+    @Override
+    public List<UserResponseModel> findUsersByProjectId(String projectId) {
+        return projectRepository.findById(projectId)
+                .map(Project::getUsers)
+                .orElseThrow(() -> new TRException("Project not found"))
+                .stream()
+                .distinct()
+                .map(user -> modelMapper.map(user, UserResponseModel.class))
+                .collect(Collectors.toList());
     }
 
     @Override

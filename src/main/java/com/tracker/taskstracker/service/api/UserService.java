@@ -7,6 +7,8 @@ import com.tracker.taskstracker.model.response.UserResponseModel;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface UserService extends UserDetailsService, GenericService<UserRequestModel, UserResponseModel, String> {
 
     UserResponseModel register(UserRequestModel userRequestModel);
@@ -28,4 +30,7 @@ public interface UserService extends UserDetailsService, GenericService<UserRequ
     UserResponseModel findByForgottenPasswordToken(String forgottenPasswordToken);
 
     UserResponseModel changeForgottenPassword(ChangeForgottenPasswordRequestModel changeForgottenPasswordRequestModel);
+
+    List<UserResponseModel> findUsersByProjectId(String projectId);
+
 }

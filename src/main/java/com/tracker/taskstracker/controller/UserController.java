@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -80,5 +81,10 @@ public class UserController {
     public ResponseEntity<UserResponseModel> changeForgottenPassword(@RequestBody @Valid ChangeForgottenPasswordRequestModel
                                                                              changeForgottenPasswordRequestModel) {
         return ResponseEntity.ok(userService.changeForgottenPassword(changeForgottenPasswordRequestModel));
+    }
+
+    @GetMapping("/project/{projectId}")
+    public ResponseEntity<List<UserResponseModel>> getUsersByProjectId(@PathVariable String projectId) {
+        return ResponseEntity.ok(userService.findUsersByProjectId(projectId));
     }
 }

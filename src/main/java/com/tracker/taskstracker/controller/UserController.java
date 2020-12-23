@@ -10,6 +10,7 @@ import com.tracker.taskstracker.util.LoggedUserGetter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,6 +39,11 @@ public class UserController {
     @GetMapping("/{username}")
     public ResponseEntity<UserResponseModel> getByUsername(@PathVariable String username) {
         return ResponseEntity.ok(userService.findByUsername(username));
+    }
+
+    @GetMapping("/extended/{userId}")
+    public ResponseEntity<UserResponseModel> getExtendedById(@PathVariable String userId) {
+        return ResponseEntity.ok(userService.findExtendedById(userId));
     }
 
     @GetMapping("/logged-user")

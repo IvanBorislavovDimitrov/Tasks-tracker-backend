@@ -215,6 +215,14 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
     }
 
     @Override
+    public UserResponseModel findExtendedById(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        return modelMapper.map(user, UserResponseModelExtended.class);
+
+    }
+
+    @Override
     protected Class<UserResponseModel> getOutputModelClass() {
         return UserResponseModel.class;
     }

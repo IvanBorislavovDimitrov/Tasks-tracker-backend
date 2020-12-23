@@ -33,4 +33,6 @@ public interface UserService extends UserDetailsService, GenericService<UserRequ
 
     List<UserResponseModel> findUsersByProjectId(String projectId);
 
+    UserResponseModel findExtendedById(String userId);
+
 }

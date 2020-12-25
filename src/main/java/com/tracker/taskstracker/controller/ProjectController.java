@@ -2,6 +2,7 @@ package com.tracker.taskstracker.controller;
 
 import com.tracker.taskstracker.model.request.ProjectRequestModel;
 import com.tracker.taskstracker.model.request.UserToProjectRequestModel;
+import com.tracker.taskstracker.model.response.BacklogsBugsResponseModel;
 import com.tracker.taskstracker.model.response.ProjectResponseModel;
 import com.tracker.taskstracker.service.api.ProjectService;
 import com.tracker.taskstracker.util.LoggedUserGetter;
@@ -64,5 +65,10 @@ public class ProjectController {
     @PostMapping(value = "/edit/{projectId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ProjectResponseModel> edit(@Valid ProjectRequestModel projectRequestModel, @PathVariable String projectId) {
         return ResponseEntity.ok(projectService.update(projectId, projectRequestModel));
+    }
+
+    @GetMapping(value = "/backlogs-bugs/{projectId}")
+    public ResponseEntity<BacklogsBugsResponseModel> getBacklogsBugsCount(@PathVariable String projectId) {
+        return ResponseEntity.ok(projectService.findBacklogsBugsCount(projectId));
     }
 }

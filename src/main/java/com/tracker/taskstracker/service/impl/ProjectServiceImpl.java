@@ -5,6 +5,7 @@ import com.tracker.taskstracker.domain.User;
 import com.tracker.taskstracker.exception.TRException;
 import com.tracker.taskstracker.model.request.ProjectRequestModel;
 import com.tracker.taskstracker.model.request.UserToProjectRequestModel;
+import com.tracker.taskstracker.model.response.BacklogsBugsResponseModel;
 import com.tracker.taskstracker.model.response.ProjectResponseModel;
 import com.tracker.taskstracker.model.response.ProjectResponseModelExtended;
 import com.tracker.taskstracker.repository.ProjectRepository;
@@ -114,6 +115,16 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
         project.setName(projectRequestModel.getName());
         project.setDescription(projectRequestModel.getDescription());
         return modelMapper.map(projectRepository.save(project), ProjectResponseModel.class);
+    }
+
+    @Override
+    public BacklogsBugsResponseModel findBacklogsBugsCount(String projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
+        BacklogsBugsResponseModel backlogsBugsResponseModel = new BacklogsBugsResponseModel();
+        backlogsBugsResponseModel.setBacklogsCount(project.getBacklogs().size());
+        backlogsBugsResponseModel.setBugsCount(project.getBugs().size());
+        return backlogsBugsResponseModel;
     }
 
     @Override

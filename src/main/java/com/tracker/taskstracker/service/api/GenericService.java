@@ -14,7 +14,7 @@ public interface GenericService<IM, OM extends IdModel, ID> {
 
     OM deleteById(ID id);
 
-    OM update(IM model);
+    OM update(ID id, IM model);
 
     long count();
 }

@@ -14,7 +14,6 @@ import com.tracker.taskstracker.storage.FileService;
 import com.tracker.taskstracker.storage.FileStorageGetter;
 import com.tracker.taskstracker.util.FilesUtil;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -43,15 +42,16 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
 
     @Override
     public ProjectResponseModel save(ProjectRequestModel projectRequestModel) {
+        String pictureName = saveProjectPicture(projectRequestModel);
+        Project project = modelMapper.map(projectRequestModel, Project.class);
+        project.setPictureName(pictureName);
+        return modelMapper.map(projectRepository.save(project), ProjectResponseModel.class);
+    }
+
+    private String saveProjectPicture(ProjectRequestModel projectRequestModel) {
         String pictureName = projectRequestModel.getName() + FilesUtil.getFileExtension(projectRequestModel.getPicture());
-        modelMapper.addMappings(new PropertyMap<ProjectRequestModel, Project>() {
-            @Override
-            protected void configure() {
-                map().setPictureName(pictureName);
-            }
-        });
         fileService.save(pictureName, projectRequestModel.getPicture());
-        return super.save(projectRequestModel);
+        return pictureName;
     }
 
     @Override
@@ -103,6 +103,17 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
         ProjectResponseModel projectResponseModel = super.deleteById(projectId);
         fileService.deleteByName(projectResponseModel.getPictureName());
         return projectResponseModel;
+    }
+
+    @Override
+    public ProjectResponseModel update(String projectId, ProjectRequestModel projectRequestModel) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
+        String pictureName = saveProjectPicture(projectRequestModel);
+        project.setPictureName(pictureName);
+        project.setName(projectRequestModel.getName());
+        project.setDescription(projectRequestModel.getDescription());
+        return modelMapper.map(projectRepository.save(project), ProjectResponseModel.class);
     }
 
     @Override

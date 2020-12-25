@@ -51,8 +51,11 @@ public abstract class GenericServiceImpl<E extends IdEntity, IM, OM extends IdMo
     }
 
     @Override
-    public OM update(IM model) {
-        return save(model);
+    public OM update(ID id, IM model) {
+        E entity = findEntityById(id);
+        E updatedEntity = modelMapper.map(model, getEntityClass());
+        updatedEntity.setId(entity.getId());
+        return modelMapper.map(repository.save(updatedEntity), getOutputModelClass());
     }
 
     @Override

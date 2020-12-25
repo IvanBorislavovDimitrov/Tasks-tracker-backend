@@ -60,4 +60,9 @@ public class ProjectController {
         ProjectResponseModel projectResponseModel = projectService.deleteById(projectId);
         return ResponseEntity.ok(projectResponseModel);
     }
+
+    @PostMapping(value = "/edit/{projectId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProjectResponseModel> edit(@Valid ProjectRequestModel projectRequestModel, @PathVariable String projectId) {
+        return ResponseEntity.ok(projectService.update(projectId, projectRequestModel));
+    }
 }

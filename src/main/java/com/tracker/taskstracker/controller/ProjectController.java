@@ -4,6 +4,7 @@ import com.tracker.taskstracker.model.request.ProjectRequestModel;
 import com.tracker.taskstracker.model.request.UserToProjectRequestModel;
 import com.tracker.taskstracker.model.response.BacklogsBugsResponseModel;
 import com.tracker.taskstracker.model.response.ProjectResponseModel;
+import com.tracker.taskstracker.model.response.ProjectTaskStatesResponseModel;
 import com.tracker.taskstracker.service.api.ProjectService;
 import com.tracker.taskstracker.util.LoggedUserGetter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,5 +71,10 @@ public class ProjectController {
     @GetMapping(value = "/backlogs-bugs/{projectId}")
     public ResponseEntity<BacklogsBugsResponseModel> getBacklogsBugsCount(@PathVariable String projectId) {
         return ResponseEntity.ok(projectService.findBacklogsBugsCount(projectId));
+    }
+
+    @GetMapping(value = "/tasks-statistics/{projectId}")
+    public ResponseEntity<ProjectTaskStatesResponseModel> getProjectTaskStatesResponseModel(@PathVariable String projectId) {
+        return ResponseEntity.ok(projectService.findProjectTasksStatesStatistics(projectId));
     }
 }

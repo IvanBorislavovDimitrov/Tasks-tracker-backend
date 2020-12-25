@@ -88,6 +88,30 @@ public class Project extends IdEntity {
                 .collect(Collectors.toList());
     }
 
+    public List<Task> getBacklogTasks() {
+        return getTasks().stream()
+                .filter(task -> task.getState() == Task.State.BACKLOG)
+                .collect(Collectors.toList());
+    }
+
+    public List<Task> getSelectedTasks() {
+        return getTasks().stream()
+                .filter(task -> task.getState() == Task.State.SELECTED)
+                .collect(Collectors.toList());
+    }
+
+    public List<Task> getInProgressTasks() {
+        return getTasks().stream()
+                .filter(task -> task.getState() == Task.State.IN_PROGRESS)
+                .collect(Collectors.toList());
+    }
+
+    public List<Task> getBlockedItems() {
+        return getTasks().stream()
+                .filter(task -> task.getState() == Task.State.BLOCKED)
+                .collect(Collectors.toList());
+    }
+
     public List<Task> getBugs() {
         return getTasks().stream()
                 .filter(task -> task.getType() == Task.Type.BUG)

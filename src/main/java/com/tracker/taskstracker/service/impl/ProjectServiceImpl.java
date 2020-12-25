@@ -8,6 +8,7 @@ import com.tracker.taskstracker.model.request.UserToProjectRequestModel;
 import com.tracker.taskstracker.model.response.BacklogsBugsResponseModel;
 import com.tracker.taskstracker.model.response.ProjectResponseModel;
 import com.tracker.taskstracker.model.response.ProjectResponseModelExtended;
+import com.tracker.taskstracker.model.response.ProjectTaskStatesResponseModel;
 import com.tracker.taskstracker.repository.ProjectRepository;
 import com.tracker.taskstracker.repository.UserRepository;
 import com.tracker.taskstracker.service.api.ProjectService;
@@ -125,6 +126,19 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
         backlogsBugsResponseModel.setBacklogsCount(project.getBacklogs().size());
         backlogsBugsResponseModel.setBugsCount(project.getBugs().size());
         return backlogsBugsResponseModel;
+    }
+
+    @Override
+    public ProjectTaskStatesResponseModel findProjectTasksStatesStatistics(String projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
+        return ProjectTaskStatesResponseModel.builder()
+                .setBacklogItems(project.getBacklogTasks().size())
+                .setBlockedItems(project.getBlockedItems().size())
+                .setCompletedItems(project.getCompletedTasks().size())
+                .setInProgressItems(project.getInProgressTasks().size())
+                .setSelectedItems(project.getSelectedTasks().size())
+                .build();
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.tracker.taskstracker.model.request.ProjectRequestModel;
 import com.tracker.taskstracker.model.request.UserToProjectRequestModel;
 import com.tracker.taskstracker.model.response.BacklogsBugsResponseModel;
 import com.tracker.taskstracker.model.response.ProjectResponseModel;
+import com.tracker.taskstracker.model.response.ProjectTaskStatesResponseModel;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface ProjectService extends GenericService<ProjectRequestModel, Proj
     String findProjectPictureName(String projectId);
 
     BacklogsBugsResponseModel findBacklogsBugsCount(String projectId);
+
+    ProjectTaskStatesResponseModel findProjectTasksStatesStatistics(String projectId);
 }

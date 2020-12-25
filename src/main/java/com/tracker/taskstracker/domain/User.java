@@ -177,6 +177,19 @@ public class User extends IdEntity implements UserDetails {
         return loginRecords.remove(0);
     }
 
+    public boolean isAdmin() {
+        return getRoles().stream()
+                .map(Role::getType)
+                .anyMatch(role -> Objects.equals(role, Role.Type.ADMIN));
+    }
+
+    public boolean isOnlyUser() {
+        List<Role.Type> roleTypes = getRoles().stream()
+                .map(Role::getType)
+                .collect(Collectors.toList());
+        return roleTypes.contains(Role.Type.USER) && !roleTypes.contains(Role.Type.ADMIN);
+    }
+
     @Embeddable
     public static class LoginRecord {
 

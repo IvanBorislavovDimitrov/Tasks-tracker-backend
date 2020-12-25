@@ -132,6 +132,18 @@ public class Project extends IdEntity {
         users.add(user);
     }
 
+    public List<User> getAdmins() {
+        return getUsers().stream()
+                .filter(User::isAdmin)
+                .collect(Collectors.toList());
+    }
+
+    public List<User> getOnlyUsers() {
+        return getUsers().stream()
+                .filter(User::isOnlyUser)
+                .collect(Collectors.toList());
+    }
+
     public void addComment(ProjectComment projectComment) {
         projectComments.add(projectComment);
     }

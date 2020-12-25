@@ -5,10 +5,7 @@ import com.tracker.taskstracker.domain.User;
 import com.tracker.taskstracker.exception.TRException;
 import com.tracker.taskstracker.model.request.ProjectRequestModel;
 import com.tracker.taskstracker.model.request.UserToProjectRequestModel;
-import com.tracker.taskstracker.model.response.BacklogsBugsResponseModel;
-import com.tracker.taskstracker.model.response.ProjectResponseModel;
-import com.tracker.taskstracker.model.response.ProjectResponseModelExtended;
-import com.tracker.taskstracker.model.response.ProjectTaskStatesResponseModel;
+import com.tracker.taskstracker.model.response.*;
 import com.tracker.taskstracker.repository.ProjectRepository;
 import com.tracker.taskstracker.repository.UserRepository;
 import com.tracker.taskstracker.service.api.ProjectService;
@@ -139,6 +136,16 @@ public class ProjectServiceImpl extends GenericServiceImpl<Project, ProjectReque
                 .setInProgressItems(project.getInProgressTasks().size())
                 .setSelectedItems(project.getSelectedTasks().size())
                 .build();
+    }
+
+    @Override
+    public AdminsUsersResponseModel findAdminsUsersStatistics(String projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
+        AdminsUsersResponseModel adminsUsersResponseModel = new AdminsUsersResponseModel();
+        adminsUsersResponseModel.setAdminsCount(project.getAdmins().size());
+        adminsUsersResponseModel.setUsersCount(project.getOnlyUsers().size());
+        return adminsUsersResponseModel;
     }
 
     @Override

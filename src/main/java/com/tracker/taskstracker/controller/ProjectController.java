@@ -2,6 +2,7 @@ package com.tracker.taskstracker.controller;
 
 import com.tracker.taskstracker.model.request.ProjectRequestModel;
 import com.tracker.taskstracker.model.request.UserToProjectRequestModel;
+import com.tracker.taskstracker.model.response.AdminsUsersResponseModel;
 import com.tracker.taskstracker.model.response.BacklogsBugsResponseModel;
 import com.tracker.taskstracker.model.response.ProjectResponseModel;
 import com.tracker.taskstracker.model.response.ProjectTaskStatesResponseModel;
@@ -76,5 +77,10 @@ public class ProjectController {
     @GetMapping(value = "/tasks-statistics/{projectId}")
     public ResponseEntity<ProjectTaskStatesResponseModel> getProjectTaskStatesResponseModel(@PathVariable String projectId) {
         return ResponseEntity.ok(projectService.findProjectTasksStatesStatistics(projectId));
+    }
+
+    @GetMapping(value = "/admins-users/{projectId}")
+    public ResponseEntity<AdminsUsersResponseModel> getAdminsUsersStatistic(@PathVariable String projectId) {
+        return ResponseEntity.ok(projectService.findAdminsUsersStatistics(projectId));
     }
 }

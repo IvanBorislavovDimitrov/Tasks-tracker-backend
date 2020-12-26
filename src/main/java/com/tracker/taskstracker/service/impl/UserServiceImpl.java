@@ -8,8 +8,10 @@ import com.tracker.taskstracker.exception.TRException;
 import com.tracker.taskstracker.model.request.ChangeForgottenPasswordRequestModel;
 import com.tracker.taskstracker.model.request.UpdateUserPasswordRequestModel;
 import com.tracker.taskstracker.model.request.UserRequestModel;
+import com.tracker.taskstracker.model.request.UserRolesRequestModel;
 import com.tracker.taskstracker.model.response.UserResponseModel;
 import com.tracker.taskstracker.model.response.UserResponseModelExtended;
+import com.tracker.taskstracker.model.response.UsersUsernamesResponseModel;
 import com.tracker.taskstracker.repository.ProjectRepository;
 import com.tracker.taskstracker.repository.RoleRepository;
 import com.tracker.taskstracker.repository.UserRepository;
@@ -30,10 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
@@ -220,7 +219,43 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRequestModel, 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
         return modelMapper.map(user, UserResponseModelExtended.class);
+    }
 
+    @Override
+    public UserResponseModel updateUserRoles(UserRolesRequestModel userRolesRequestModel) {
+        User user = userRepository.findByUsername(userRolesRequestModel.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        List<Role> newRoles = findRolesByTypes(userRolesRequestModel.getRoles());
+        List<Role> rolesThatAreNotAssignedAnymore = getRolesThatAreNotAssignedAnymore(user.getRoles(), newRoles);
+        rolesThatAreNotAssignedAnymore.forEach(role -> role.getUsers().remove(user));
+        newRoles.forEach(role -> role.addUserIfNotExists(user));
+        user.setRoles(newRoles);
+        return modelMapper.map(userRepository.save(user), UserResponseModel.class);
+    }
+
+    private List<Role> getRolesThatAreNotAssignedAnymore(List<Role> currentRoles, List<Role> newRoles) {
+        return currentRoles.stream()
+                .filter(currentRole -> !newRoles.contains(currentRole))
+                .collect(Collectors.toList());
+
+    }
+
+    private List<Role> findRolesByTypes(List<String> userRoles) {
+        return userRoles.stream()
+                .map(userRole -> roleRepository.findByType(Role.Type.valueOf(userRole)))
+                .map(Optional::get)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public UsersUsernamesResponseModel findAllStartingWith(String username) {
+        List<UserResponseModel> userResponseModels = userRepository.findAllByUsernameStartingWith(username)
+                .stream()
+                .map(user -> modelMapper.map(user, UserResponseModel.class))
+                .collect(Collectors.toList());
+        UsersUsernamesResponseModel usersUsernamesResponseModel = new UsersUsernamesResponseModel();
+        usersUsernamesResponseModel.setUsers(userResponseModels);
+        return usersUsernamesResponseModel;
     }
 
     @Override

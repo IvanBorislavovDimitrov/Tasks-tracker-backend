@@ -35,6 +35,13 @@ public class Role extends IdEntity {
         users.add(user);
     }
 
+    public void addUserIfNotExists(User user) {
+        if (users.contains(user)) {
+            return;
+        }
+        addUser(user);
+    }
+
     @Override
     public String toString() {
         return type.toString();

@@ -19,4 +19,6 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByForgottenPasswordToken(String forgottenPasswordToken);
 
     List<User> findAllByProjectsId(String projectId);
+
+    List<User> findAllByUsernameStartingWith(String username);
 }

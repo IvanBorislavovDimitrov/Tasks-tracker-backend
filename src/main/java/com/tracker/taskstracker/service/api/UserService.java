@@ -3,7 +3,9 @@ package com.tracker.taskstracker.service.api;
 import com.tracker.taskstracker.model.request.ChangeForgottenPasswordRequestModel;
 import com.tracker.taskstracker.model.request.UpdateUserPasswordRequestModel;
 import com.tracker.taskstracker.model.request.UserRequestModel;
+import com.tracker.taskstracker.model.request.UserRolesRequestModel;
 import com.tracker.taskstracker.model.response.UserResponseModel;
+import com.tracker.taskstracker.model.response.UsersUsernamesResponseModel;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,4 +37,7 @@ public interface UserService extends UserDetailsService, GenericService<UserRequ
 
     UserResponseModel findExtendedById(String userId);
 
+    UserResponseModel updateUserRoles(UserRolesRequestModel userRolesRequestModel);
+
+    UsersUsernamesResponseModel findAllStartingWith(String username);
 }

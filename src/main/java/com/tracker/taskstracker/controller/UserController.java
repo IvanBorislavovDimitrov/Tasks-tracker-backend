@@ -1,10 +1,8 @@
 package com.tracker.taskstracker.controller;
 
-import com.tracker.taskstracker.model.request.ChangeForgottenPasswordRequestModel;
-import com.tracker.taskstracker.model.request.ForgottenPasswordRequestModel;
-import com.tracker.taskstracker.model.request.UpdateUserPasswordRequestModel;
-import com.tracker.taskstracker.model.request.UserRequestModel;
+import com.tracker.taskstracker.model.request.*;
 import com.tracker.taskstracker.model.response.UserResponseModel;
+import com.tracker.taskstracker.model.response.UsersUsernamesResponseModel;
 import com.tracker.taskstracker.service.api.UserService;
 import com.tracker.taskstracker.util.LoggedUserGetter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,5 +89,16 @@ public class UserController {
     @GetMapping("/project/{projectId}")
     public ResponseEntity<List<UserResponseModel>> getUsersByProjectId(@PathVariable String projectId) {
         return ResponseEntity.ok(userService.findUsersByProjectId(projectId));
+    }
+
+    @PatchMapping("/update/roles")
+    public ResponseEntity<UserResponseModel> changeUserRoles(@RequestBody @Valid
+                                                                     UserRolesRequestModel userRolesRequestModel) {
+        return ResponseEntity.ok(userService.updateUserRoles(userRolesRequestModel));
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<UsersUsernamesResponseModel> findUsersStartingWith(@RequestParam String username) {
+        return ResponseEntity.ok(userService.findAllStartingWith(username));
     }
 }

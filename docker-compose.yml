@@ -4,8 +4,7 @@ services:
     container_name: tasks-tracker-backend
     restart: always
     environment:
-      spring_profiles_active: dev
-      DROPBOX_ACCESS_TOKEN: "<DROPBOX_ACCESS_TOKEN>"
+      DROPBOX_ACCESS_TOKEN: "${DROPBOX_ACCESS_TOKEN}"
     build: .
     ports:
       - "8080:8080"

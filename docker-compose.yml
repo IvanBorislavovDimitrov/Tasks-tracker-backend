@@ -1,0 +1,27 @@
+version: "3"
+services:
+  web:
+    container_name: tasks-tracker-backend
+    restart: always
+    environment:
+      spring_profiles_active: dev
+      DROPBOX_ACCESS_TOKEN: "<DROPBOX_ACCESS_TOKEN>"
+    build: .
+    ports:
+      - "8080:8080"
+    links:
+      - db
+  db:
+    image: "postgres"
+    container_name: "postgres_container"
+    environment:
+      - POSTGRES_USER=ivan
+      - POSTGRES_PASSWORD=34273427
+      - POSTGRES_DB=tracker
+    ports:
+      - "5433:5432"
+    volumes:
+      - my_dbdata:/var/lib/postgresql/data/
+
+volumes:
+  my_dbdata:

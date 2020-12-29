@@ -11,7 +11,7 @@ public class Project extends IdEntity {
 
     @Column(nullable = false, unique = true)
     private String name;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10000)
     private String description;
     @Column
     private String pictureName;

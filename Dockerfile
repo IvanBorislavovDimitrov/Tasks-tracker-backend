@@ -19,4 +19,6 @@ COPY ./ ./project
 
 RUN cd project && mvn clean install
 
+EXPOSE 8080
+
 ENTRYPOINT [ "java", "-jar", "./project/target/tasks-tracker-0.0.1-SNAPSHOT.jar" ]
